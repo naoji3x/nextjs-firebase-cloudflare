@@ -8,7 +8,15 @@
     "source.organizeImports": "explicit"
   },
 
+  // TODO: 以下、mdxでimportsがコードのボトムに追加されるのを防ぐための設定。あとで直す。
+  "[mdx]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never"
+    }
+  },
+
   "eslint.workingDirectories": ["./src", "./functions"],
+
   "eslint.validate": [
     "javascript",
     "javascriptreact",
