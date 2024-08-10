@@ -1,0 +1,51 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.formatAll.terraform": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  "eslint.workingDirectories": ["./src", "./functions"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "cSpell.words": [
+    "autodocs",
+    "chflick",
+    "clsx",
+    "eamodio",
+    "esbenp",
+    "firecode",
+    "gcloud",
+    "ionicons",
+    "joshuanianji",
+    "lcov",
+    "lefthook",
+    "lucide",
+    "mhutchie",
+    "postcss",
+    "presync",
+    "pullstate",
+    "signin",
+    "signout",
+    "tcono",
+    "tfvars",
+    "typegen",
+    "unifiedjs",
+    "unmocked",
+    "Viewports"
+  ]
+}

@@ -1,0 +1,56 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+  "name": "Node.js",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-18-bullseye",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {
+      "version": "13.13.3"
+    },
+    "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
+    "ghcr.io/joshuanianji/devcontainer-features/gcloud-cli-persistence:1": {},
+    "ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
+    "ghcr.io/joshuanianji/devcontainer-features/terraform-cli-persistence:1": {},
+    "ghcr.io/joshuanianji/devcontainer-features/github-cli-persistence:1": {},
+    "ghcr.io/devcontainers/features/java:1": {}
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [8080],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "npm install -g lefthook",
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
+          }
+        }
+      },
+      "extensions": [
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "editorconfig.editorconfig",
+        "streetsidesoftware.code-spell-checker",
+        "esbenp.prettier-vscode",
+        "hashicorp.terraform",
+        "unifiedjs.vscode-mdx",
+        "chflick.firecode"
+      ]
+    }
+  },
+
+  "remoteEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  }
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}
