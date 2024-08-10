@@ -56,3 +56,12 @@ next-env.d.ts
 
 # service worker env values
 /public/sw-env.js
+
+# firebase
+logs
+*.log
+firebase-debug.log*
+firebase-debug.*.log*
+.firebase/
+
+
