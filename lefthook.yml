@@ -5,7 +5,7 @@ pre-push:
       run: npm audit --production
     functions-packages-audit:
       tags: functions security
-      root: functions/src
+      root: functions
       run: npm audit --production
 
 pre-commit:
