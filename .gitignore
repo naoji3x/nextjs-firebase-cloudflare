@@ -62,6 +62,5 @@ logs
 *.log
 firebase-debug.log*
 firebase-debug.*.log*
+/emulator-data
 .firebase/
-
-

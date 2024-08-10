@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "emulators": "(cd functions && npm run build) && firebase emulators:start --import=emulator-data --export-on-exit=emulator-data"
   },
   "dependencies": {
     "react": "18.3.1",
