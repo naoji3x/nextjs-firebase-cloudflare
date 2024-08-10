@@ -14,12 +14,15 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     // Exclude test files from the build
     config.module.rules.push({
-      test: /\.(test|stories|mock)\.(js|jsx|ts|tsx)$/,
+      test: /(^tests\/.*|\.(test|stories|mock)\.(js|jsx|ts|tsx))$/,
       loader: 'ignore-loader'
     })
 
     return config
-  }
+  },
+  // Testing next.js app with t3-env / Cannot use import statement outside a module
+  // https://www.reddit.com/r/nextjs/comments/1d6cuvg/testing_nextjs_app_with_t3env_cannot_use_import/
+  transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core']
 }
 
 export default nextConfig
