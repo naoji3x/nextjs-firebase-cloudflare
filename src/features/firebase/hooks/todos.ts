@@ -1,6 +1,6 @@
 'use client'
 
-import { firestore } from '@/features/firebase/client'
+import { getFirestore } from '@/features/firebase/client'
 import { collection, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Todo, todoConverter } from 'shared/types/todo'
@@ -12,7 +12,7 @@ export const useTodos = (uid?: string) => {
 
   useEffect(() => {
     if (!uid) return
-    const col = collection(firestore, collectionName(uid)).withConverter(
+    const col = collection(getFirestore(), collectionName(uid)).withConverter(
       todoConverter
     )
     const unsubscribe = onSnapshot(col, (snapshot) => {

@@ -3,7 +3,7 @@ import {
   signIn as signInWith,
   signOut as signOutNextAuth
 } from 'next-auth/react'
-import { auth } from '../client'
+import { getAuth } from '../client'
 
 /**
  * Sign in with Google.
@@ -15,6 +15,7 @@ export const signIn = async () => await signInWith('google')
  * @param callbackUrl redirect URL after sign out
  */
 export const signOut = async (callbackUrl = '/') => {
+  const auth = getAuth()
   if (auth.currentUser) {
     await signOutFirebase(auth)
   }

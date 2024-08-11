@@ -1,6 +1,6 @@
 'use client'
 
-import { auth as firebaseAuth } from '@/features/firebase/client'
+import { getAuth as getFirebaseAuth } from '@/features/firebase/client'
 import { signOut } from '@/features/firebase/lib/google-auth'
 import {
   User as FirebaseUser,
@@ -43,19 +43,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (session) {
       console.log('you are: ' + JSON.stringify(session.user))
-      if (firebaseAuth.currentUser) {
+      const auth = getFirebaseAuth()
+      if (auth.currentUser) {
         // サインインしている場合はユーザー情報を設定する。
-        setUserContext(toUserContext(firebaseAuth.currentUser))
+        setUserContext(toUserContext(auth.currentUser))
       } else {
         // サインインしていない場合はサインインしてユーザー情報を取得する。
         const func = async () => {
           try {
             // ログイン情報を保持する
-            setPersistence(firebaseAuth, browserLocalPersistence)
+            setPersistence(auth, browserLocalPersistence)
             const cred = GoogleAuthProvider.credential(session?.user.id_token)
-            await signInWithCredential(firebaseAuth, cred)
-            if (firebaseAuth.currentUser) {
-              setUserContext(toUserContext(firebaseAuth.currentUser))
+            await signInWithCredential(auth, cred)
+            if (auth.currentUser) {
+              setUserContext(toUserContext(auth.currentUser))
             } else {
               // エラー時はとにかくサインアウトする
               console.error('Failed to sign in')

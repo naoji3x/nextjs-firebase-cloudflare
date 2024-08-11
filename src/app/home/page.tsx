@@ -18,7 +18,7 @@ import {
   getImageUrl
 } from '@/features/firebase/api/todo'
 import { upsertToken } from '@/features/firebase/api/user'
-import { functions } from '@/features/firebase/client'
+import { getFunctions } from '@/features/firebase/client'
 import { useMessage } from '@/features/firebase/hooks/message'
 import { useTodos } from '@/features/firebase/hooks/todos'
 import { useSpeechToast } from '@/hooks/speech-toast'
@@ -62,7 +62,7 @@ const Card = ({
 
 const getAuth = async (): Promise<Auth | null> => {
   const response = await httpsCallable<void, Auth | null>(
-    functions,
+    getFunctions(),
     'auth-get'
   )()
   return response.data
@@ -73,7 +73,7 @@ const sendMessage = async (
   body: string,
   token: string
 ): Promise<void> => {
-  const func = httpsCallable<Message, void>(functions, 'message-send')
+  const func = httpsCallable<Message, void>(getFunctions(), 'message-send')
   const message: Message = {
     title,
     body,
@@ -189,7 +189,7 @@ const Home = () => {
     const func = async () => {
       console.log('calling getAuth')
       const response = await httpsCallable<void, string>(
-        functions,
+        getFunctions(),
         'hello-world-kebab'
       )()
       console.log('response', response)

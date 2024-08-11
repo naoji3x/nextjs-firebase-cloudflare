@@ -1,6 +1,6 @@
 'use client'
 
-import { firestore, storage } from '@/features/firebase/client'
+import { getFirestore, getStorage } from '@/features/firebase/client'
 import 'firebase/firestore'
 import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
@@ -12,7 +12,7 @@ const handleUpload = async (file: File): Promise<string | null> => {
   if (!file) return null
   const path = 'images/' + crypto.randomUUID()
   console.log('Uploading file... ' + path)
-  const storageRef = ref(storage, path)
+  const storageRef = ref(getStorage(), path)
   try {
     await uploadBytes(storageRef, file)
     console.log('File uploaded successfully')
@@ -28,7 +28,7 @@ type addTodoInput = todoInput
 type updateTodoInput = Partial<Omit<todoInput, 'uid'>>
 
 export const getImageUrl = async (image?: string) =>
-  image ? await getDownloadURL(ref(storage, image)) : ''
+  image ? await getDownloadURL(ref(getStorage(), image)) : ''
 
 export const addTodo = async ({
   uid,
@@ -47,12 +47,15 @@ export const addTodo = async ({
     done,
     image: imagePath ?? undefined
   }
-  const docRef = await addDoc(collection(firestore, collectionName(uid)), todo)
+  const docRef = await addDoc(
+    collection(getFirestore(), collectionName(uid)),
+    todo
+  )
   console.log('Document written with ID: ', docRef.id)
 }
 
 export const deleteTodo = async (uid: string, id: string) => {
-  const docRef = doc(firestore, collectionName(uid), id)
+  const docRef = doc(getFirestore(), collectionName(uid), id)
   console.log(docRef.path)
   await deleteDoc(docRef)
 }
@@ -62,7 +65,7 @@ export const updateTodo = async (
   id: string,
   update: updateTodoInput
 ) => {
-  const docRef = doc(firestore, collectionName(uid), id)
+  const docRef = doc(getFirestore(), collectionName(uid), id)
   if (update.imageFile) {
     const image = await handleUpload(update.imageFile)
     delete update.imageFile
@@ -74,7 +77,7 @@ export const updateTodo = async (
 }
 
 export const doneTodo = async (uid: string, id: string, done = true) => {
-  const docRef = doc(firestore, collectionName(uid), id)
+  const docRef = doc(getFirestore(), collectionName(uid), id)
   await setDoc(docRef, { done }, { merge: true })
   console.log('Document written with ID: ', docRef.id)
 }

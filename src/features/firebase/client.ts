@@ -1,12 +1,18 @@
 import { getApps, initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth as _getAuth } from 'firebase/auth'
 import {
+  getFirestore as _getFirestore,
   connectFirestoreEmulator,
-  getFirestore,
   initializeFirestore
 } from 'firebase/firestore'
-import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
-import { connectStorageEmulator, getStorage } from 'firebase/storage'
+import {
+  getFunctions as _getFunctions,
+  connectFunctionsEmulator
+} from 'firebase/functions'
+import {
+  getStorage as _getStorage,
+  connectStorageEmulator
+} from 'firebase/storage'
 import { firebaseEnv } from './env.mjs'
 
 export const firebaseConfig = {
@@ -23,7 +29,7 @@ const emulatorsEnabled = () => {
   return useEmulators ? useEmulators === 'true' : false
 }
 
-export const firebase = getApps()?.length
+const firebase = getApps()?.length
   ? getApps()[0]
   : initializeApp(firebaseConfig)
 
@@ -31,16 +37,15 @@ initializeFirestore(firebase, {
   ignoreUndefinedProperties: true,
   experimentalForceLongPolling: emulatorsEnabled()
 })
+export const getFirebaseApp = () => firebase
 
-export const firebaseApp = firebase
-
-export const auth = getAuth(firebaseApp)
-export const functions = getFunctions(firebaseApp, 'asia-northeast1')
-export const firestore = getFirestore(firebaseApp)
-export const storage = getStorage(firebaseApp)
+export const getAuth = () => _getAuth(firebase)
+export const getFunctions = () => _getFunctions(firebase, 'asia-northeast1')
+export const getFirestore = () => _getFirestore(firebase)
+export const getStorage = () => _getStorage(firebase)
 
 if (emulatorsEnabled()) {
-  connectFunctionsEmulator(functions, 'localhost', 5001)
-  connectFirestoreEmulator(firestore, 'localhost', 8080)
-  connectStorageEmulator(storage, 'localhost', 9199)
+  connectFunctionsEmulator(getFunctions(), 'localhost', 5001)
+  connectFirestoreEmulator(getFirestore(), 'localhost', 8080)
+  connectStorageEmulator(getStorage(), 'localhost', 9199)
 }

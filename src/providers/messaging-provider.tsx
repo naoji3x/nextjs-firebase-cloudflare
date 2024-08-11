@@ -1,5 +1,5 @@
 'use client'
-import { firebaseApp } from '@/features/firebase/client'
+import { getFirebaseApp } from '@/features/firebase/client'
 import { firebaseEnv } from '@/features/firebase/env.mjs'
 import { getMessaging, getToken, isSupported } from 'firebase/messaging'
 import {
@@ -38,7 +38,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
               scope: '/firebase-cloud-messaging-push-scope'
             })
             console.log('messaging is supported.')
-            const messaging = getMessaging(firebaseApp)
+            const messaging = getMessaging(getFirebaseApp())
             token = await getToken(messaging, {
               vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
             })
@@ -63,7 +63,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
   const onClickTokenButton = async () => {
     console.log('retry getting token')
     setDisabled(true)
-    const messaging = getMessaging(firebaseApp)
+    const messaging = getMessaging(getFirebaseApp())
     const token = await getToken(messaging, {
       vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
     })

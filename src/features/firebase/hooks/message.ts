@@ -1,6 +1,6 @@
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { useEffect, useState } from 'react'
-import { firebaseApp } from '../client'
+import { getFirebaseApp } from '../client'
 
 export type Message = {
   messageId: string
@@ -21,7 +21,7 @@ export const useMessage = () => {
   const [message, setMessage] = useState<Message | null>(null)
 
   useEffect(() => {
-    const messaging = getMessaging(firebaseApp)
+    const messaging = getMessaging(getFirebaseApp())
     const unsubscribe = onMessage(messaging, (payload) => {
       const notification = payload?.notification
       const data = payload?.data
