@@ -1,10 +1,10 @@
 'use client'
 
 import { firestore, storage } from '@/features/firebase/client'
-import { Todo } from '@/types'
 import 'firebase/firestore'
 import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { TodoInput } from 'shared/types/todo'
 
 const collectionName = (uid: string) => `users/${uid}/todos`
 
@@ -23,22 +23,9 @@ const handleUpload = async (file: File): Promise<string | null> => {
   }
 }
 
-type addTodoInput = {
-  uid: string
-  title?: string
-  instruction: string
-  scheduledAt: Date
-  done: boolean
-  imageFile?: File
-}
-
-type updateTodoInput = {
-  title?: string
-  instruction?: string
-  scheduledAt?: Date
-  done?: boolean
-  imageFile?: File
-}
+type todoInput = Omit<TodoInput, 'image'> & { imageFile?: File }
+type addTodoInput = todoInput
+type updateTodoInput = Partial<Omit<todoInput, 'uid'>>
 
 export const getImageUrl = async (image?: string) =>
   image ? await getDownloadURL(ref(storage, image)) : ''
@@ -52,7 +39,7 @@ export const addTodo = async ({
   imageFile
 }: addTodoInput) => {
   const imagePath = imageFile ? await handleUpload(imageFile) : undefined
-  const todo: Todo = {
+  const todo: TodoInput = {
     uid,
     title,
     instruction,
@@ -76,7 +63,13 @@ export const updateTodo = async (
   update: updateTodoInput
 ) => {
   const docRef = doc(firestore, collectionName(uid), id)
-  await setDoc(docRef, update, { merge: true })
+  if (update.imageFile) {
+    const image = await handleUpload(update.imageFile)
+    delete update.imageFile
+    await setDoc(docRef, { ...update, image }, { merge: true })
+  } else {
+    await setDoc(docRef, update, { merge: true })
+  }
   console.log('Document written with ID: ', docRef.id)
 }
 

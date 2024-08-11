@@ -24,18 +24,19 @@ import { useTodos } from '@/features/firebase/hooks/todos'
 import { useSpeechToast } from '@/hooks/speech-toast'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
-import { Auth, Message, Todo, WithId } from '@/types'
+import { Auth, Message } from '@/types'
 import { Label } from '@radix-ui/react-label'
 import { httpsCallable } from 'firebase/functions'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { Todo } from 'shared/types/todo'
 
 const Card = ({
   todo,
   onDelete,
   onDone
 }: {
-  todo: WithId<Todo>
+  todo: Todo
   onDelete: (id: string) => void
   onDone: (id: string, done: boolean) => void
 }) => {
