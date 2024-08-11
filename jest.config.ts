@@ -97,7 +97,7 @@ const config: Config = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '^@/(.*)$': './src/$1'
+    '^@/(.*)$': '<rootDir>/src/$1'
     // 'next-auth/(.*)': './node_modules/next-auth/$1'
   },
 
