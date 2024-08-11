@@ -44,14 +44,16 @@ export const addTodo = async ({
     title,
     instruction,
     scheduledAt,
-    done,
-    image: imagePath ?? undefined
+    done
+  }
+  if (imagePath) {
+    todo.image = imagePath
   }
   const docRef = await addDoc(
     collection(getFirestore(), collectionName(uid)),
     todo
   )
-  console.log('Document written with ID: ', docRef.id)
+  return docRef
 }
 
 export const deleteTodo = async (uid: string, id: string) => {

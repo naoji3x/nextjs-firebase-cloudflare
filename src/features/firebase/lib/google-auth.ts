@@ -1,9 +1,9 @@
+import { getAuth } from '@/features/firebase/client'
 import { signOut as signOutFirebase } from 'firebase/auth'
 import {
   signIn as signInWith,
   signOut as signOutNextAuth
 } from 'next-auth/react'
-import { getAuth } from '../client'
 
 /**
  * Sign in with Google.

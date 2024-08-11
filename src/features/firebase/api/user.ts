@@ -1,5 +1,5 @@
+import { getFirestore } from '@/features/firebase/client'
 import { arrayUnion, doc, setDoc } from 'firebase/firestore'
-import { getFirestore } from '../client'
 
 const collectionName = (uid: string) => `users/${uid}`
 

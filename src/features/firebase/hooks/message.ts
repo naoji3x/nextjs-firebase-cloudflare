@@ -1,6 +1,6 @@
+import { getFirebaseApp } from '@/features/firebase/client'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { useEffect, useState } from 'react'
-import { getFirebaseApp } from '../client'
 
 export type Message = {
   messageId: string

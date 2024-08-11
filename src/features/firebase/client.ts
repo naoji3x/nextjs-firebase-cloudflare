@@ -1,4 +1,4 @@
-import { getApps, initializeApp } from 'firebase/app'
+import { FirebaseApp, getApps, initializeApp } from 'firebase/app'
 import { getAuth as _getAuth } from 'firebase/auth'
 import {
   getFirestore as _getFirestore,
@@ -24,28 +24,54 @@ export const firebaseConfig = {
   appId: firebaseEnv.NEXT_PUBLIC_APP_ID
 }
 
-const emulatorsEnabled = () => {
+export const emulatorsEnabled = () => {
   const useEmulators = firebaseEnv.NEXT_PUBLIC_USE_FIREBASE_EMULATORS
   return useEmulators ? useEmulators === 'true' : false
 }
 
-const firebase = getApps()?.length
-  ? getApps()[0]
-  : initializeApp(firebaseConfig)
+let initialized = false
+let firebase: FirebaseApp
 
-initializeFirestore(firebase, {
-  ignoreUndefinedProperties: true,
-  experimentalForceLongPolling: emulatorsEnabled()
-})
-export const getFirebaseApp = () => firebase
+const initialize = () => {
+  if (initialized) return
+  initialized = true
 
-export const getAuth = () => _getAuth(firebase)
-export const getFunctions = () => _getFunctions(firebase, 'asia-northeast1')
-export const getFirestore = () => _getFirestore(firebase)
-export const getStorage = () => _getStorage(firebase)
+  firebase = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig)
 
-if (emulatorsEnabled()) {
-  connectFunctionsEmulator(getFunctions(), 'localhost', 5001)
-  connectFirestoreEmulator(getFirestore(), 'localhost', 8080)
-  connectStorageEmulator(getStorage(), 'localhost', 9199)
+  initializeFirestore(firebase, {
+    ignoreUndefinedProperties: true,
+    experimentalForceLongPolling: emulatorsEnabled()
+  })
+
+  if (emulatorsEnabled()) {
+    connectFunctionsEmulator(getFunctions(), 'localhost', 5001)
+    connectFirestoreEmulator(getFirestore(), 'localhost', 8080)
+    connectStorageEmulator(getStorage(), 'localhost', 9199)
+  }
+}
+
+export const getFirebaseApp = () => {
+  console.log('getFirebaseApp')
+  initialize()
+  return firebase
+}
+export const getAuth = () => {
+  console.log('getAuth')
+  initialize()
+  return _getAuth(firebase)
+}
+export const getFunctions = () => {
+  console.log('getFunctions')
+  initialize()
+  return _getFunctions(firebase, 'asia-northeast1')
+}
+export const getFirestore = () => {
+  console.log('getFirestore')
+  initialize()
+  return _getFirestore(firebase)
+}
+export const getStorage = () => {
+  console.log('getStorage')
+  initialize()
+  return _getStorage(firebase)
 }
