@@ -78,6 +78,7 @@
     "markdownlint-cli": "0.41.0",
     "postcss": "8.4.41",
     "prettier": "3.2.5",
+    "remeda": "2.10.1",
     "storybook": "8.2.8",
     "stylelint": "16.8.1",
     "tailwindcss": "3.4.9",

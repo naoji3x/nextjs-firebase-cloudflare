@@ -1,12 +1,20 @@
 /** @jest-environment node */
 // https://stackoverflow.com/questions/75890427/firestore-rules-tests-always-ends-with-timeout-error
 
-import { addTodo } from '@/features/firebase/api/todo'
+import {
+  addTodo,
+  deleteTodo,
+  doTodo,
+  getTodo,
+  updateTodo
+} from '@/features/firebase/api/todo'
 import { RulesTestEnvironment } from '@firebase/rules-unit-testing'
 import { addDoc, collection } from 'firebase/firestore'
-import { initializeMockEnvironment } from 'tests/rules/firestore/utils'
+import { readFileSync } from 'fs'
+import { initializeTestEnvironment } from 'tests/rules/firestore/utils'
 
 const getFirestoreMock = jest.fn()
+const getStorageMock = jest.fn()
 
 jest.mock('@/features/firebase/client', () => {
   const client = jest.requireActual<
@@ -15,47 +23,97 @@ jest.mock('@/features/firebase/client', () => {
   return {
     __esModule: true,
     ...client,
-    getFirestore: () => getFirestoreMock()
+    getFirestore: () => getFirestoreMock(),
+    getStorage: () => getStorageMock()
   }
 })
 
-let mockEnv: RulesTestEnvironment
+let testEnv: RulesTestEnvironment
+
+const readBlob = (path: string, name: string, type = 'image/png'): Blob => {
+  const filePath = path
+  const fileBuffer = readFileSync(filePath)
+  return new Blob([fileBuffer], { type })
+}
 
 describe('todo', () => {
   const userId = 'dummy-user-id'
   beforeAll(async () => {
-    mockEnv = await initializeMockEnvironment()
+    testEnv = await initializeTestEnvironment()
   })
 
   beforeEach(async () => {
     getFirestoreMock.mockReturnValue(
-      mockEnv.authenticatedContext(userId).firestore()
+      testEnv.authenticatedContext(userId).firestore()
+    )
+    getStorageMock.mockReturnValue(
+      testEnv.authenticatedContext(userId).storage()
     )
   })
 
   afterEach(async () => {
-    await mockEnv.clearFirestore()
+    await testEnv.clearFirestore()
+    await testEnv.clearStorage()
   })
 
   afterAll(async () => {
-    await mockEnv.cleanup()
+    await testEnv.cleanup()
   })
 
-  it('add data by calling addTodo', async () => {
+  it('adds, updates, does and deletes a todo', async () => {
     const todo = {
       uid: userId,
       title: 'title',
       instruction: 'instruction',
       scheduledAt: new Date(),
-      done: false,
-      imageFile: undefined
+      done: false
     }
-    const docRef = await addTodo(todo)
-    expect(docRef.id).not.toBeNull()
+
+    const id = await addTodo(todo)
+    expect(id).toBeTruthy()
+
+    const newTodo = await getTodo(userId, id)
+    expect(newTodo).not.toBeNull()
+    expect(newTodo?.id).toBe(id)
+    expect(newTodo?.uid).toBe(todo.uid)
+    expect(newTodo?.title).toBe(todo.title)
+    expect(newTodo?.instruction).toBe(todo.instruction)
+    expect(newTodo?.scheduledAt.getTime()).toBe(todo.scheduledAt.getTime())
+    expect(newTodo?.done).toBe(todo.done)
+
+    const newInstruction = 'new instruction'
+    await updateTodo(userId, id, { instruction: newInstruction })
+    const updatedTodo = await getTodo(userId, id)
+    expect(updatedTodo?.instruction).toBe(newInstruction)
+
+    await doTodo(userId, id)
+    const doneTodo = await getTodo(userId, id)
+    expect(doneTodo?.done).toBeTruthy()
+
+    await deleteTodo(userId, id)
+    const deletedTodo = await getTodo(userId, id)
+    expect(deletedTodo).toBeNull()
   })
 
-  it('add data', async () => {
-    const firestore = mockEnv.authenticatedContext(userId).firestore()
+  it('adds a todo with an image', async () => {
+    const blob = readBlob('tests/assets/sample.png', 'sample.png')
+    const id = await addTodo({
+      uid: userId,
+      title: 'title',
+      instruction: 'instruction',
+      scheduledAt: new Date(),
+      done: false,
+      imageBlob: blob
+    })
+    expect(id).not.toBeNull()
+
+    const newTodo = await getTodo(userId, id)
+    expect(newTodo).not.toBeNull()
+    expect(newTodo?.image).toBeTruthy()
+  })
+
+  it('adds a todo by firestore api', async () => {
+    const firestore = testEnv.authenticatedContext(userId).firestore()
     const todo = {
       uid: userId,
       title: 'title',
@@ -68,6 +126,6 @@ describe('todo', () => {
       collection(firestore, collectionName(userId)),
       todo
     )
-    expect(docRef.id).not.toBeNull()
+    expect(docRef.id).toBeTruthy()
   })
 })

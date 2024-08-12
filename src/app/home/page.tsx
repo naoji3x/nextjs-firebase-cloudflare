@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 import {
   addTodo,
   deleteTodo,
-  doneTodo,
+  doTodo,
   getImageUrl
 } from '@/features/firebase/api/todo'
 import { upsertToken } from '@/features/firebase/api/user'
@@ -143,7 +143,7 @@ const Home = () => {
         instruction: todoValue,
         scheduledAt,
         done: false,
-        imageFile: file
+        imageBlob: file ? new Blob([file], { type: file.type }) : undefined
       })
       setTitleValue('')
       setTodoValue('')
@@ -167,7 +167,7 @@ const Home = () => {
     if (!user) return
     console.log('done todo', id, done)
     try {
-      doneTodo(user.uid, id, done)
+      doTodo(user.uid, id, done)
     } catch (e) {
       console.error('Error doneTodo: ', e)
     }

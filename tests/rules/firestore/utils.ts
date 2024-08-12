@@ -5,16 +5,20 @@ import {
 import { randomUUID } from 'crypto'
 import { readFileSync } from 'fs'
 
-export const initializeMockEnvironment =
+export const initializeTestEnvironment =
   async (): Promise<RulesTestEnvironment> => {
-    process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080'
     const projectId = randomUUID()
-    const mockEnv = await _initializeTestEnvironment({
+    return await _initializeTestEnvironment({
       projectId,
       firestore: {
-        rules: readFileSync('firestore.rules', 'utf8')
+        rules: readFileSync('firestore.rules', 'utf8'),
+        host: 'localhost',
+        port: 8080
+      },
+      storage: {
+        rules: readFileSync('storage.rules', 'utf8'),
+        host: 'localhost',
+        port: 9199
       }
     })
-
-    return mockEnv
   }

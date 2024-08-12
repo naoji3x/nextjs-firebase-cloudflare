@@ -3,7 +3,7 @@ import 'cross-fetch/polyfill'
 import useTodos from '@/features/firebase/hooks/todos'
 import { RulesTestEnvironment } from '@firebase/rules-unit-testing'
 import { renderHook } from '@testing-library/react'
-import { initializeMockEnvironment } from 'tests/rules/firestore/utils'
+import { initializeTestEnvironment } from 'tests/rules/firestore/utils'
 
 const getFirestoreMock = jest.fn()
 jest.mock('@/features/firebase/client', () => {
@@ -22,7 +22,7 @@ let mockEnv: RulesTestEnvironment
 describe('todo', () => {
   const userId = 'dummy-user-id'
   beforeAll(async () => {
-    mockEnv = await initializeMockEnvironment()
+    mockEnv = await initializeTestEnvironment()
   })
 
   beforeEach(async () => {

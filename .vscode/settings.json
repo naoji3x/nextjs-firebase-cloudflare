@@ -43,6 +43,7 @@
     "postcss",
     "presync",
     "pullstate",
+    "remeda",
     "signin",
     "signout",
     "stylelint",
