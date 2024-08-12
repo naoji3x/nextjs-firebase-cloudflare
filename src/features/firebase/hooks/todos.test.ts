@@ -1,5 +1,3 @@
-import 'cross-fetch/polyfill'
-
 import useTodos from '@/features/firebase/hooks/todos'
 import { renderHook } from '@testing-library/react'
 
