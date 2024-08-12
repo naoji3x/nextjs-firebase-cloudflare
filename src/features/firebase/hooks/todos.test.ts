@@ -3,22 +3,11 @@ import 'cross-fetch/polyfill'
 import useTodos from '@/features/firebase/hooks/todos'
 import { renderHook } from '@testing-library/react'
 
-import {
-  getTestEnv,
-  initializeTestEnvironment
-} from 'tests/rules/firestore/utils'
+import { initializeTestEnvironment } from 'tests/rules/firestore/utils'
 
-const getFirestoreMock = jest.fn()
-jest.mock('@/features/firebase/client', () => {
-  const client = jest.requireActual<
-    typeof import('@/features/firebase/client')
-  >('@/features/firebase/client')
-  return {
-    __esModule: true,
-    ...client,
-    getFirestore: () => getFirestoreMock()
-  }
-})
+jest.mock('@/features/firebase/client', () => ({
+  getFirestore: jest.fn()
+}))
 
 jest.mock('firebase/firestore', () => {
   const actual =
@@ -28,6 +17,9 @@ jest.mock('firebase/firestore', () => {
   return {
     __esModule: true,
     ...actual,
+    collection: jest.fn((firestore, path) => ({
+      withConverter: jest.fn().mockReturnThis()
+    })),
     onSnapshot: jest.fn((collection, callback) => {
       // モックのデータを定義
       const mockData = {
@@ -55,20 +47,6 @@ describe('todo', () => {
   const userId = 'dummy-user-id'
   beforeAll(async () => {
     await initializeTestEnvironment()
-  })
-
-  beforeEach(async () => {
-    getFirestoreMock.mockReturnValue(
-      getTestEnv().authenticatedContext(userId).firestore()
-    )
-  })
-
-  afterEach(async () => {
-    await getTestEnv().clearFirestore()
-  })
-
-  afterAll(async () => {
-    await getTestEnv().cleanup()
   })
 
   it('fetches todos', async () => {
