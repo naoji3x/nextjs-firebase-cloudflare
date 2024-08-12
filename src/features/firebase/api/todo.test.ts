@@ -6,10 +6,12 @@ import {
   deleteTodo,
   doTodo,
   getTodo,
+  onTodosChanged,
   updateTodo
 } from '@/features/firebase/api/todo'
 import { addDoc, collection } from 'firebase/firestore'
 import { readFileSync } from 'fs'
+import { Todo } from 'shared/types/todo'
 import {
   getTestEnv,
   initializeTestEnvironment
@@ -38,6 +40,7 @@ const readBlob = (path: string, name: string, type = 'image/png'): Blob => {
 
 describe('todo', () => {
   const userId = 'dummy-user-id'
+
   beforeAll(async () => {
     await initializeTestEnvironment()
   })
@@ -110,6 +113,34 @@ describe('todo', () => {
     const newTodo = await getTodo(userId, id)
     expect(newTodo).not.toBeNull()
     expect(newTodo?.image).toBeTruthy()
+  })
+
+  it('listens to todos changes', async () => {
+    let todos: Todo[] = []
+
+    const unsubscribe = onTodosChanged(userId, (newTodos) => {
+      todos = newTodos
+    })
+
+    expect(todos.length).toBe(0)
+
+    const todo = {
+      uid: userId,
+      title: 'title',
+      instruction: 'instruction',
+      scheduledAt: new Date(),
+      done: false
+    }
+
+    const id = await addTodo(todo)
+    expect(todos.length).toBe(1)
+
+    await deleteTodo(userId, id)
+    expect(todos.length).toBe(0)
+
+    unsubscribe()
+    await addTodo(todo)
+    expect(todos.length).toBe(0)
   })
 
   it('adds a todo by firestore api', async () => {

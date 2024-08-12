@@ -9,10 +9,11 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  onSnapshot,
   setDoc
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { todoConverter, TodoInput } from 'shared/types/todo'
+import { Todo, todoConverter, TodoInput } from 'shared/types/todo'
 
 const collectionName = (uid: string) => `users/${uid}/todos`
 
@@ -95,4 +96,22 @@ export const getTodo = async (uid: string, id: string) => {
   )
   const docSnap = await getDoc(docRef)
   return docSnap.exists() ? docSnap.data() : null
+}
+
+export const onTodosChanged = (
+  uid: string,
+  callback: (todos: Todo[]) => void
+) => {
+  const col = collection(getFirestore(), collectionName(uid)).withConverter(
+    todoConverter
+  )
+  const unsubscribe = onSnapshot(col, (snapshot) => {
+    const newTodos: Todo[] = snapshot.docs
+      .map((doc) => doc.data())
+      .filter((t): t is Todo => t !== null)
+      .sort((lhs, rhs) => rhs.scheduledAt.getTime() - lhs.scheduledAt.getTime())
+
+    callback(newTodos)
+  })
+  return unsubscribe
 }
