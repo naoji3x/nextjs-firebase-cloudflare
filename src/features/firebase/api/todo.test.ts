@@ -8,10 +8,12 @@ import {
   getTodo,
   updateTodo
 } from '@/features/firebase/api/todo'
-import { RulesTestEnvironment } from '@firebase/rules-unit-testing'
 import { addDoc, collection } from 'firebase/firestore'
 import { readFileSync } from 'fs'
-import { initializeTestEnvironment } from 'tests/rules/firestore/utils'
+import {
+  getTestEnv,
+  initializeTestEnvironment
+} from 'tests/rules/firestore/utils'
 
 const getFirestoreMock = jest.fn()
 const getStorageMock = jest.fn()
@@ -28,8 +30,6 @@ jest.mock('@/features/firebase/client', () => {
   }
 })
 
-let testEnv: RulesTestEnvironment
-
 const readBlob = (path: string, name: string, type = 'image/png'): Blob => {
   const filePath = path
   const fileBuffer = readFileSync(filePath)
@@ -39,25 +39,25 @@ const readBlob = (path: string, name: string, type = 'image/png'): Blob => {
 describe('todo', () => {
   const userId = 'dummy-user-id'
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment()
+    await initializeTestEnvironment()
   })
 
   beforeEach(async () => {
     getFirestoreMock.mockReturnValue(
-      testEnv.authenticatedContext(userId).firestore()
+      getTestEnv().authenticatedContext(userId).firestore()
     )
     getStorageMock.mockReturnValue(
-      testEnv.authenticatedContext(userId).storage()
+      getTestEnv().authenticatedContext(userId).storage()
     )
   })
 
   afterEach(async () => {
-    await testEnv.clearFirestore()
-    await testEnv.clearStorage()
+    await getTestEnv().clearFirestore()
+    await getTestEnv().clearStorage()
   })
 
   afterAll(async () => {
-    await testEnv.cleanup()
+    await getTestEnv().cleanup()
   })
 
   it('adds, updates, does and deletes a todo', async () => {
@@ -113,7 +113,7 @@ describe('todo', () => {
   })
 
   it('adds a todo by firestore api', async () => {
-    const firestore = testEnv.authenticatedContext(userId).firestore()
+    const firestore = getTestEnv().authenticatedContext(userId).firestore()
     const todo = {
       uid: userId,
       title: 'title',
