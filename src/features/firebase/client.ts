@@ -51,27 +51,22 @@ const initialize = () => {
 }
 
 export const getFirebaseApp = () => {
-  console.log('getFirebaseApp')
   initialize()
   return firebase
 }
 export const getAuth = () => {
-  console.log('getAuth')
   initialize()
   return _getAuth(firebase)
 }
 export const getFunctions = () => {
-  console.log('getFunctions')
   initialize()
   return _getFunctions(firebase, 'asia-northeast1')
 }
 export const getFirestore = () => {
-  console.log('getFirestore')
   initialize()
   return _getFirestore(firebase)
 }
 export const getStorage = () => {
-  console.log('getStorage')
   initialize()
   return _getStorage(firebase)
 }

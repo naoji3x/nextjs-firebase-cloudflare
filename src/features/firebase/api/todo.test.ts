@@ -14,7 +14,7 @@ import { Todo } from 'shared/types/todo'
 import {
   getTestEnv,
   initializeTestEnvironment
-} from 'tests/rules/firestore/utils'
+} from 'tests/rules/rules-test-helper'
 
 const getFirestoreMock = jest.fn()
 const getStorageMock = jest.fn()
@@ -113,7 +113,7 @@ describe('todo', () => {
     expect(deletedTodo).toBeNull()
   })
 
-  it('adds a todo with an image', async () => {
+  it('should add a todo with an image', async () => {
     const blob = readBlob('tests/assets/sample.png', 'sample.png')
     const id = await addTodo({
       uid: userId,
@@ -130,7 +130,7 @@ describe('todo', () => {
     expect(newTodo?.image).toBeTruthy()
   })
 
-  it('listens to todos changes', async () => {
+  it('should listen to todos changes', async () => {
     let todos: Todo[] = []
 
     const unsubscribe = onTodosChanged(userId, (newTodos) => {
@@ -158,7 +158,7 @@ describe('todo', () => {
     expect(todos.length).toBe(0)
   })
 
-  it('adds a todo by firestore api', async () => {
+  it('should add a todo by firestore api', async () => {
     const firestore = getTestEnv().authenticatedContext(userId).firestore()
     const todo = {
       uid: userId,
