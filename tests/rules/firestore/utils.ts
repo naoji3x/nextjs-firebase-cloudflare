@@ -1,6 +1,7 @@
 /** @jest-environment node */
 // https://stackoverflow.com/questions/75890427/firestore-rules-tests-always-ends-with-timeout-error
 
+import { firebaseEnv } from '@/features/firebase/env.mjs'
 import {
   initializeTestEnvironment as _initializeTestEnvironment,
   RulesTestEnvironment
@@ -18,7 +19,7 @@ import { readFileSync } from 'fs'
 let testEnv: RulesTestEnvironment
 
 export const initializeTestEnvironment = async () => {
-  const projectId = randomUUID()
+  const projectId = firebaseEnv.NEXT_PUBLIC_PROJECT_ID
   testEnv = await _initializeTestEnvironment({
     projectId,
     firestore: {

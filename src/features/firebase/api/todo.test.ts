@@ -1,6 +1,5 @@
 /** @jest-environment node */
 // https://stackoverflow.com/questions/75890427/firestore-rules-tests-always-ends-with-timeout-error
-
 import {
   addTodo,
   deleteTodo,
@@ -63,7 +62,23 @@ describe('todo', () => {
     await getTestEnv().cleanup()
   })
 
-  it('adds, updates, does and deletes a todo', async () => {
+  it('should add dnd deletes a todo', async () => {
+    const todo = {
+      uid: userId,
+      title: 'title',
+      instruction: 'instruction',
+      scheduledAt: new Date(),
+      done: false
+    }
+    const id = await addTodo(todo)
+    expect(id).toBeTruthy()
+
+    await deleteTodo(userId, id)
+    const deletedTodo = await getTodo(userId, id)
+    expect(deletedTodo).toBeNull()
+  })
+
+  it('should add, update, do and delete a todo', async () => {
     const todo = {
       uid: userId,
       title: 'title',

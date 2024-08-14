@@ -10,7 +10,8 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  setDoc
+  setDoc,
+  Timestamp
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { Todo, todoConverter, TodoInput } from 'shared/types/todo'
@@ -58,10 +59,12 @@ export const addTodo = async ({
   if (imagePath) {
     todo.image = imagePath
   }
-  const docRef = await addDoc(
-    collection(getFirestore(), collectionName(uid)),
-    todo
-  )
+  const now = Timestamp.now().toDate()
+  const docRef = await addDoc(collection(getFirestore(), collectionName(uid)), {
+    ...todo,
+    createdAt: now,
+    updatedAt: now
+  })
   return docRef.id
 }
 
@@ -76,18 +79,30 @@ export const updateTodo = async (
   update: updateTodoInput
 ) => {
   const docRef = doc(getFirestore(), collectionName(uid), id)
+  let image = undefined
   if (update.imageBlob) {
-    const image = await handleUpload(update.imageBlob)
+    image = await handleUpload(update.imageBlob)
     delete update.imageBlob
-    await setDoc(docRef, { ...update, image }, { merge: true })
-  } else {
-    await setDoc(docRef, update, { merge: true })
   }
+
+  await setDoc(
+    docRef,
+    {
+      ...update,
+      ...(image ? { image } : {}),
+      updatedAt: Timestamp.now().toDate()
+    },
+    { merge: true }
+  )
 }
 
 export const doTodo = async (uid: string, id: string, done = true) => {
   const docRef = doc(getFirestore(), collectionName(uid), id)
-  await setDoc(docRef, { done }, { merge: true })
+  await setDoc(
+    docRef,
+    { done, updatedAt: Timestamp.now().toDate() },
+    { merge: true }
+  )
 }
 
 export const getTodo = async (uid: string, id: string) => {

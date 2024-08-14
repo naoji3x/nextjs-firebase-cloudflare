@@ -11,7 +11,7 @@ import { Auth } from '@/types/auth'
 import { Message } from '@/types/message'
 import { randomUUID } from 'crypto'
 import { initializeApp } from 'firebase-admin/app'
-import { Timestamp, getFirestore } from 'firebase-admin/firestore'
+import { getFirestore } from 'firebase-admin/firestore'
 import { TaskQueue } from 'firebase-admin/functions'
 import * as functions from 'firebase-functions'
 import * as logger from 'firebase-functions/logger'
@@ -23,6 +23,7 @@ import {
 import { onCall } from 'firebase-functions/v2/https'
 import { setGlobalOptions } from 'firebase-functions/v2/options'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
+import { isDeepStrictEqual } from 'util'
 import * as messageService from './services/message-service'
 
 // ** note **
@@ -41,9 +42,9 @@ if (process.env.FUNCTIONS_EMULATOR) {
   Object.assign(TaskQueue.prototype, {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     enqueue: (data: any, params: any) =>
-      console.debug('enqueue tasks: ', data, params),
+      logger.info('enqueue tasks: ', data, params),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete: (data: any) => console.debug('delete tasks: ', data)
+    delete: (data: any) => logger.info('delete tasks: ', data)
   })
 }
 
@@ -70,9 +71,6 @@ const helloWorldKebab = onCall<void, string>((request): string => {
   return 'Hello kebab world!: ' + request.auth?.uid
 })
 
-// 関数をエクスポートする際に、オブジェクトに入れることで、ケバブケースにできる。
-exports.hello = { world: { kebab: helloWorldKebab, v2: helloWorldV2 } }
-
 // Functionに渡された認証情報を取得する関数
 const getAuth = onCall<void, Auth | null>((request): Auth | null => {
   if (request.auth) {
@@ -84,8 +82,6 @@ const getAuth = onCall<void, Auth | null>((request): Auth | null => {
   }
   return null
 })
-
-exports.auth = { get: getAuth }
 
 // メッセージを送信する関数
 const sendMessage = onCall<Message, void>(async (request) => {
@@ -110,15 +106,15 @@ const scheduleMessage = onTaskDispatched<Message>(
   async (request) => await messageService.sendMessage(request.data)
 )
 
-exports.message = { send: sendMessage, task: scheduleMessage }
-
 const queueMessage = async (
   uid: string,
   scheduledAt: Date,
   title: string,
   body: string
 ): Promise<string | undefined> => {
-  const userRef = await firestore.collection('users').doc(uid)
+  logger.info('now queueing message ...')
+
+  const userRef = firestore.collection('users').doc(uid)
   const userSnapshot = await userRef.get()
   let taskId = undefined
   if (userSnapshot.exists) {
@@ -149,22 +145,19 @@ const todoCreated = onDocumentCreated(
   async (event) => {
     const snapshot = event.data
     if (!snapshot) return null
-    logger.info('now creating timestamps ...', { structuredData: true })
+    const scheduledAt = snapshot.data().scheduledAt
+    if (!scheduledAt) {
+      return null
+    }
 
     const taskId = await queueMessage(
       event.params.uid,
-      snapshot.data().scheduledAt.toDate(),
+      scheduledAt.toDate(),
       snapshot.data().title,
       snapshot.data().instruction
     )
-    return snapshot.ref.set(
-      {
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-        taskId
-      },
-      { merge: true }
-    )
+
+    return taskId ? await snapshot.ref.set({ taskId }, { merge: true }) : null
   }
 )
 
@@ -172,12 +165,21 @@ const todoCreated = onDocumentCreated(
 const todoUpdated = onDocumentUpdated(
   '/users/{uid}/todos/{todoId}',
   async (event) => {
-    const updatedAtBefore = event.data?.before?.data().updatedAt
-    if (!updatedAtBefore) return null
-    const updatedAtAfter = event.data?.after?.data().updatedAt
-    if (updatedAtBefore.isEqual(updatedAtAfter)) return null
+    const before = {
+      scheduledAt: event.data?.before.data().scheduledAt,
+      title: event.data?.before.data().title,
+      instruction: event.data?.before.data().instruction
+    }
 
-    logger.info('now updating updatedAt ...', { structuredData: true })
+    const after = {
+      scheduledAt: event.data?.after.data().scheduledAt,
+      title: event.data?.after.data().title,
+      instruction: event.data?.after.data().instruction
+    }
+
+    if (isDeepStrictEqual(before, after)) {
+      return null
+    }
 
     let taskId = event.data?.before.data().taskId
     if (taskId) {
@@ -185,18 +187,14 @@ const todoUpdated = onDocumentUpdated(
     }
     taskId = await queueMessage(
       event.params.uid,
-      event.data?.after.data().scheduledAt,
-      event.data?.after.data().title,
-      event.data?.after.data().instruction
+      after.scheduledAt.toDate(),
+      after.title,
+      after.instruction
     )
 
-    return event.data?.after.ref.set(
-      {
-        updatedAt: Timestamp.now(),
-        taskId
-      },
-      { merge: true }
-    )
+    return taskId
+      ? await event.data?.after.ref.set({ taskId }, { merge: true })
+      : null
   }
 )
 
@@ -212,6 +210,10 @@ const todoDeleted = onDocumentDeleted(
   }
 )
 
+// 関数をエクスポートする際に、オブジェクトに入れることで、ケバブケースにできる。
+exports.hello = { world: { kebab: helloWorldKebab, v2: helloWorldV2 } }
+exports.auth = { get: getAuth }
+exports.message = { send: sendMessage, task: scheduleMessage }
 exports.todo = {
   created: todoCreated,
   updated: todoUpdated,
