@@ -24,9 +24,7 @@
   ],
   "plugins": ["@typescript-eslint", "import", "jest"],
   "rules": {
-    "quotes": ["error", "single"],
     "import/no-unresolved": 0,
-    "indent": ["error", 2],
     "jest/consistent-test-it": ["error", { "fn": "it" }],
     "jest/require-top-level-describe": ["error"]
   }

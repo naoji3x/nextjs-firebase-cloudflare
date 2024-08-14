@@ -12,21 +12,24 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
+  getAuth,
+  helloWorldKebab,
+  sendMessage
+} from '@/features/firebase/api/functions'
+import {
   addTodo,
   deleteTodo,
   doTodo,
   getImageUrl
 } from '@/features/firebase/api/todo'
 import { upsertToken } from '@/features/firebase/api/user'
-import { getFunctions } from '@/features/firebase/client'
 import { useMessage } from '@/features/firebase/hooks/message'
 import { useTodos } from '@/features/firebase/hooks/todos'
 import { useSpeechToast } from '@/hooks/speech-toast'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
-import { Auth, Message } from '@/types'
+import { Auth } from '@/types'
 import { Label } from '@radix-ui/react-label'
-import { httpsCallable } from 'firebase/functions'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Todo } from 'shared/types/todo'
@@ -58,28 +61,6 @@ const Card = ({
       onDone={(id, done) => onDone(id, done)}
     />
   )
-}
-
-const getAuth = async (): Promise<Auth | null> => {
-  const response = await httpsCallable<void, Auth | null>(
-    getFunctions(),
-    'auth-get'
-  )()
-  return response.data
-}
-
-const sendMessage = async (
-  title: string,
-  body: string,
-  token: string
-): Promise<void> => {
-  const func = httpsCallable<Message, void>(getFunctions(), 'message-send')
-  const message: Message = {
-    title,
-    body,
-    tokens: [token]
-  }
-  await func(message)
 }
 
 const Home = () => {
@@ -178,7 +159,7 @@ const Home = () => {
     if (!messaging?.token || messageValue === '') return
     try {
       console.log('sending message : ' + messaging.token)
-      await sendMessage('メッセージ', messageValue, messaging.token)
+      await sendMessage('メッセージ', messageValue, [messaging.token])
     } catch (e) {
       console.error('Error adding document: ', e)
     }
@@ -188,10 +169,7 @@ const Home = () => {
   useEffect(() => {
     const func = async () => {
       console.log('calling getAuth')
-      const response = await httpsCallable<void, string>(
-        getFunctions(),
-        'hello-world-kebab'
-      )()
+      const response = await helloWorldKebab()
       console.log('response', response)
       setServerAuth(await getAuth())
     }
@@ -268,8 +246,8 @@ const Home = () => {
                   {serverAuth ? (
                     <>
                       <div>{serverAuth.uid}</div>
-                      <div>name: {serverAuth.name}</div>
-                      <div>email: {serverAuth.email}</div>
+                      <div>name: {serverAuth.token.name}</div>
+                      <div>email: {serverAuth.token.email}</div>
                     </>
                   ) : (
                     'no auth data'

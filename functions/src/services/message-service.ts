@@ -1,7 +1,7 @@
-import { Message } from '@/types/message'
 import { getFunctions } from 'firebase-admin/functions'
 import { getMessaging } from 'firebase-admin/messaging'
 import { logger } from 'firebase-functions/v2'
+import { Message } from '../types/message'
 import { getFunctionUrl } from './tasks'
 
 // メッセージを送信する
