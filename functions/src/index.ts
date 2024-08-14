@@ -211,10 +211,10 @@ const todoDeleted = onDocumentDeleted(
 )
 
 // 関数をエクスポートする際に、オブジェクトに入れることで、ケバブケースにできる。
-exports.hello = { world: { kebab: helloWorldKebab, v2: helloWorldV2 } }
-exports.auth = { get: getAuth }
-exports.message = { send: sendMessage, task: scheduleMessage }
-exports.todo = {
+export const hello = { world: { kebab: helloWorldKebab, v2: helloWorldV2 } }
+export const auth = { get: getAuth }
+export const message = { send: sendMessage, task: scheduleMessage }
+export const todo = {
   created: todoCreated,
   updated: todoUpdated,
   deleted: todoDeleted
