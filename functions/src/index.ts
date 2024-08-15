@@ -75,7 +75,7 @@ const sendMessage = onCall<Message, void>(
 )
 
 // メッセージを送信するタスク
-export const scheduleMessage = onTaskDispatched<Message>(
+const scheduleMessage = onTaskDispatched<Message>(
   messageController.messageTaskOptions,
   async (request) => await messageController.messageTask(request.data)
 )

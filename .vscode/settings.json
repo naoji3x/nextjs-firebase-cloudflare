@@ -8,7 +8,7 @@
     "source.organizeImports": "explicit"
   },
 
-  "eslint.workingDirectories": ["./src", "./functions"],
+  "eslint.workingDirectories": ["./"],
 
   "eslint.validate": [
     "javascript",

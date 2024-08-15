@@ -1,12 +1,15 @@
 import path from 'path'
 import { defineConfig } from 'vite'
-import { VitePluginNode as vitePluginNode } from 'vite-plugin-node'
+import { VitePluginNode } from 'vite-plugin-node'
 
 export default defineConfig({
   build: {
     outDir: 'lib',
     rollupOptions: {
-      input: 'src/index.ts' // ここでエントリーポイントを指定
+      input: 'src/index.ts', // ここでエントリーポイントを指定
+      output: {
+        format: 'cjs' // commonjs形式で出力
+      }
     }
   },
   resolve: {
@@ -15,12 +18,16 @@ export default defineConfig({
     }
   },
   plugins: [
-    ...vitePluginNode({
+    // eslint-disable-next-line new-cap
+    ...VitePluginNode({
       // Nodejs native Request adapter
       adapter: 'express',
 
       // tell the plugin where is your project entry
-      appPath: 'src/index.ts'
+      appPath: 'src/index.ts',
+
+      // The TypeScript compiler you want to use
+      tsCompiler: 'tsc'
     })
   ]
 })
