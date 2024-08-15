@@ -1,6 +1,8 @@
 import { getFunctions } from '@/features/firebase/client'
-import { Auth, Message } from '@/types'
+import { Auth } from '@/types/auth'
+import { Message } from '@/types/message'
 import { httpsCallable } from 'firebase/functions'
+// import { httpsCallable } from 'firebase/functions'
 
 export const helloWorldKebab = async () =>
   (await httpsCallable<void, string>(getFunctions(), 'hello-world-kebab')())

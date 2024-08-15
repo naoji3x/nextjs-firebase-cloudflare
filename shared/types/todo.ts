@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { firebaseTimestamps, timestamps, WithId } from './utils'
 
 const base = {
-  uid: z.string(),
+  // uid: z.string(),
   title: z.string().optional(),
   instruction: z.string(),
   done: z.boolean(),

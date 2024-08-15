@@ -12,9 +12,19 @@ if (process.env.NODE_ENV === 'development') {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { isServer }) => {
+    // Exclude functions directory from the build
+    config.module.rules.push({
+      test: /functions\/.*$/,
+      loader: 'ignore-loader'
+    })
+    // Exclude tests directory from the build
+    config.module.rules.push({
+      test: /tests\/.*$/,
+      loader: 'ignore-loader'
+    })
     // Exclude test files from the build
     config.module.rules.push({
-      test: /(^tests\/.*|\.(test|stories|mock)\.(js|jsx|ts|tsx))$/,
+      test: /\.(test|stories|mock)\.(js|jsx|ts|tsx)$/,
       loader: 'ignore-loader'
     })
 

@@ -28,7 +28,7 @@ import { useTodos } from '@/features/firebase/hooks/todos'
 import { useSpeechToast } from '@/hooks/speech-toast'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
-import { Auth } from '@/types'
+import { Auth } from '@/types/auth'
 import { Label } from '@radix-ui/react-label'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -118,13 +118,13 @@ const Home = () => {
         time.getMinutes()
       )
       console.log('add todo', titleValue, todoValue, scheduledAt)
-      await addTodo({
-        uid: user.uid,
+      await addTodo(user.uid, {
+        // uid: user.uid,
         title: titleValue,
         instruction: todoValue,
         scheduledAt,
         done: false,
-        imageBlob: file ? new Blob([file], { type: file.type }) : undefined
+        ...(file ? { imageBlob: new Blob([file], { type: file.type }) } : {})
       })
       setTitleValue('')
       setTodoValue('')
