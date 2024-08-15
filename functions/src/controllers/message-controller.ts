@@ -1,6 +1,6 @@
-import * as messageService from '../services/message-service'
-import { Auth } from '../types/auth'
-import { Message } from '../types/message'
+import * as messageService from '@/services/message-service'
+import { Auth } from '@/types/auth'
+import { Message } from '@/types/message'
 
 // メッセージを送信する関数
 export const sendMessage = async (message?: Message, auth?: Auth) => {

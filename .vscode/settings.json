@@ -52,6 +52,7 @@
     "typegen",
     "unifiedjs",
     "unmocked",
-    "Viewports"
+    "Viewports",
+    "vite"
   ]
 }

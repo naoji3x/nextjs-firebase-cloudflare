@@ -6,7 +6,12 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
-
+import * as authController from '@/controllers/auth-controller'
+import * as helloController from '@/controllers/hello-controller'
+import * as messageController from '@/controllers/message-controller'
+import * as todoTrigger from '@/triggers/todo-trigger'
+import { Auth } from '@/types/auth'
+import { Message } from '@/types/message'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { TaskQueue } from 'firebase-admin/functions'
@@ -20,12 +25,6 @@ import {
 import { onCall } from 'firebase-functions/v2/https'
 import { setGlobalOptions } from 'firebase-functions/v2/options'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
-import * as authController from './controllers/auth-controller'
-import * as helloController from './controllers/hello-controller'
-import * as messageController from './controllers/message-controller'
-import * as todoTrigger from './triggers/todo-trigger'
-import { Auth } from './types/auth'
-import { Message } from './types/message'
 
 // 関数の中では環境変数が使えるが、トップレベルでは使えない。
 // regionは固定値で設定する。環境変数から読み込もうとしたが、エラーになる。

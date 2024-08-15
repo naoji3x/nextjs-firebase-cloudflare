@@ -1,9 +1,9 @@
+import * as messageService from '@/services/message-service'
 import { randomUUID } from 'crypto'
 import { Firestore } from 'firebase-admin/firestore'
 import * as logger from 'firebase-functions/logger'
 import { DocumentSnapshot } from 'firebase-functions/v2/firestore'
 import { isDeepStrictEqual } from 'util'
-import * as messageService from '../services/message-service'
 
 // todo メッセージをキューに登録する関数
 const queueMessage = async (
