@@ -1,4 +1,4 @@
-import { getApps, initializeApp } from 'firebase/app'
+import { FirebaseApp, getApps, initializeApp } from 'firebase/app'
 import { getAuth as _getAuth } from 'firebase/auth'
 import {
   getFirestore as _getFirestore,
@@ -29,19 +29,19 @@ export const emulatorsEnabled = () => {
   return useEmulators ? useEmulators === 'true' : false
 }
 
-const firebase = getApps()?.length
-  ? getApps()[0]
-  : initializeApp(firebaseConfig)
-
-initializeFirestore(firebase, {
-  ignoreUndefinedProperties: true,
-  experimentalForceLongPolling: emulatorsEnabled()
-})
+let firebase: FirebaseApp
 
 let initialized = false
 const initialize = () => {
   if (initialized) return
   initialized = true
+
+  firebase = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig)
+
+  initializeFirestore(firebase, {
+    ignoreUndefinedProperties: true,
+    experimentalForceLongPolling: emulatorsEnabled()
+  })
 
   if (emulatorsEnabled()) {
     connectFunctionsEmulator(getFunctions(), 'localhost', 5001)
