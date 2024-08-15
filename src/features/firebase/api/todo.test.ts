@@ -64,13 +64,12 @@ describe('todo', () => {
 
   it('should add dnd deletes a todo', async () => {
     const todo = {
-      uid: userId,
       title: 'title',
       instruction: 'instruction',
       scheduledAt: new Date(),
       done: false
     }
-    const id = await addTodo(todo)
+    const id = await addTodo(userId, todo)
     expect(id).toBeTruthy()
 
     await deleteTodo(userId, id)
@@ -80,20 +79,18 @@ describe('todo', () => {
 
   it('should add, update, do and delete a todo', async () => {
     const todo = {
-      uid: userId,
       title: 'title',
       instruction: 'instruction',
       scheduledAt: new Date(),
       done: false
     }
 
-    const id = await addTodo(todo)
+    const id = await addTodo(userId, todo)
     expect(id).toBeTruthy()
 
     const newTodo = await getTodo(userId, id)
     expect(newTodo).not.toBeNull()
     expect(newTodo?.id).toBe(id)
-    expect(newTodo?.uid).toBe(todo.uid)
     expect(newTodo?.title).toBe(todo.title)
     expect(newTodo?.instruction).toBe(todo.instruction)
     expect(newTodo?.scheduledAt.getTime()).toBe(todo.scheduledAt.getTime())
@@ -115,8 +112,7 @@ describe('todo', () => {
 
   it('should add a todo with an image', async () => {
     const blob = readBlob('tests/assets/sample.png', 'sample.png')
-    const id = await addTodo({
-      uid: userId,
+    const id = await addTodo(userId, {
       title: 'title',
       instruction: 'instruction',
       scheduledAt: new Date(),
@@ -140,21 +136,20 @@ describe('todo', () => {
     expect(todos.length).toBe(0)
 
     const todo = {
-      uid: userId,
       title: 'title',
       instruction: 'instruction',
       scheduledAt: new Date(),
       done: false
     }
 
-    const id = await addTodo(todo)
+    const id = await addTodo(userId, todo)
     expect(todos.length).toBe(1)
 
     await deleteTodo(userId, id)
     expect(todos.length).toBe(0)
 
     unsubscribe()
-    await addTodo(todo)
+    await addTodo(userId, todo)
     expect(todos.length).toBe(0)
   })
 

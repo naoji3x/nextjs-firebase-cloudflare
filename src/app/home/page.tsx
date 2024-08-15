@@ -119,7 +119,6 @@ const Home = () => {
       )
       console.log('add todo', titleValue, todoValue, scheduledAt)
       await addTodo(user.uid, {
-        // uid: user.uid,
         title: titleValue,
         instruction: todoValue,
         scheduledAt,

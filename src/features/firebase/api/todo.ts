@@ -42,18 +42,10 @@ export const getImageUrl = async (image?: string) =>
 
 export const addTodo = async (
   uid: string,
-  {
-    // uid,
-    title,
-    instruction,
-    scheduledAt,
-    done,
-    imageBlob
-  }: addTodoInput
+  { title, instruction, scheduledAt, done, imageBlob }: addTodoInput
 ) => {
   const imagePath = imageBlob ? await handleUpload(imageBlob) : undefined
   const todo: TodoInput = {
-    // uid,
     title,
     instruction,
     scheduledAt,
