@@ -1,5 +1,5 @@
 import { onMessageReceived } from '@/features/firebase/api/message'
-import { ReceivedMessage } from '@/types'
+import { ReceivedMessage } from 'shared/types/message'
 
 jest.mock('@/features/firebase/client', () => {
   return {

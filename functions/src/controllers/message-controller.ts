@@ -1,9 +1,9 @@
 import * as messageService from '@/services/message-service'
-import { Auth } from '@/types/auth'
-import { Message } from '@/types/message'
+import { Auth } from 'shared/types/auth'
+import { SendingMessage } from 'shared/types/message'
 
 // メッセージを送信する関数
-export const sendMessage = async (message?: Message, auth?: Auth) => {
+export const sendMessage = async (message?: SendingMessage, auth?: Auth) => {
   if (!auth) return
   if (!message) return
   await messageService.sendMessage(message)
@@ -20,5 +20,5 @@ export const messageTaskOptions = {
   }
 }
 
-export const messageTask = async (message: Message) =>
+export const messageTask = async (message: SendingMessage) =>
   await messageService.sendMessage(message)

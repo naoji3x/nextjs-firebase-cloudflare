@@ -72,11 +72,8 @@ export const todoUpdated = async (
   snapshotBefore?: DocumentSnapshot,
   snapshotAfter?: DocumentSnapshot
 ) => {
-  logger.info(snapshotBefore?.data())
-
   const parsedDataBefore = todoFirebaseSchema.safeParse(snapshotBefore?.data())
   if (!parsedDataBefore.success) {
-    logger.info(parsedDataBefore.error.errors.map((e) => e.message).join('\n'))
     return null
   }
   const todoBefore = parsedDataBefore.data
@@ -94,9 +91,6 @@ export const todoUpdated = async (
   ) {
     return null
   }
-
-  logger.info(todoBefore)
-  logger.info(todoAfter)
 
   // まだ予定が実施されていないものは、関連するタスクを削除する。
   const now = new Date()

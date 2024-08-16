@@ -14,7 +14,8 @@ import {
   setDoc
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { Todo, todoConverter, TodoInput } from 'shared/types/todo'
+import { todoConverter } from 'shared/types/firebase/todo-firebase'
+import { Todo, TodoInput } from 'shared/types/todo'
 
 const collectionName = (uid: string) => `users/${uid}/todos`
 

@@ -1,8 +1,8 @@
-import { FirestoreDataConverter, Timestamp } from 'firebase/firestore'
 import { z } from 'zod'
-import { firebaseTimestamps, timestamps, WithId } from './utils'
+import { timestamps } from './timestamps'
+import { WithId } from './with-id'
 
-const base = {
+export const todoBase = {
   title: z.string().optional(),
   instruction: z.string(),
   done: z.boolean(),
@@ -10,45 +10,16 @@ const base = {
   taskId: z.string().optional()
 }
 
-export const todoFirebaseSchema = z.object({
-  scheduledAt: z.instanceof(Timestamp),
-  ...base,
-  ...firebaseTimestamps
-})
 export const todoSchema = z.object({
   scheduledAt: z.date(),
-  ...base,
+  ...todoBase,
   ...timestamps
 })
 
 export const todoInputSchema = z.object({
   scheduledAt: z.date(),
-  ...base
+  ...todoBase
 })
 
-export type TodoFirebase = z.infer<typeof todoFirebaseSchema>
 export type Todo = WithId<z.infer<typeof todoSchema>>
 export type TodoInput = z.infer<typeof todoInputSchema>
-
-export const todoConverter: FirestoreDataConverter<Todo> = {
-  // date型は直接firestoreに保存できないが、Timestamp型に自動で変換される。
-  toFirestore: (todo) => {
-    return todo as Omit<Todo, 'id'>
-  },
-  // date型をTimestampから元に戻す。
-  fromFirestore: (snapshot) => {
-    const data = snapshot.data({ serverTimestamps: 'estimate' })
-    const parsedData = todoFirebaseSchema.safeParse(data)
-    if (!parsedData.success) {
-      throw new Error(parsedData.error.errors.map((e) => e.message).join('\n'))
-    }
-    const firestore = parsedData.data
-    return {
-      id: snapshot.id,
-      ...firestore,
-      scheduledAt: firestore.scheduledAt.toDate(),
-      createdAt: firestore.createdAt ? firestore.createdAt.toDate() : undefined,
-      updatedAt: firestore.updatedAt ? firestore.updatedAt.toDate() : undefined
-    }
-  }
-}

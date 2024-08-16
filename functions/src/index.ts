@@ -10,8 +10,6 @@ import * as authController from '@/controllers/auth-controller'
 import * as helloController from '@/controllers/hello-controller'
 import * as messageController from '@/controllers/message-controller'
 import * as todoTrigger from '@/triggers/todo-trigger'
-import { Auth } from '@/types/auth'
-import { Message } from '@/types/message'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { TaskQueue } from 'firebase-admin/functions'
@@ -25,6 +23,8 @@ import {
 import { onCall } from 'firebase-functions/v2/https'
 import { setGlobalOptions } from 'firebase-functions/v2/options'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
+import { Auth } from 'shared/types/auth'
+import { SendingMessage } from 'shared/types/message'
 
 // 関数の中では環境変数が使えるが、トップレベルでは使えない。
 // regionは固定値で設定する。環境変数から読み込もうとしたが、エラーになる。
@@ -69,13 +69,13 @@ const getAuth = onCall<void, Auth | null>((request) =>
 )
 
 // メッセージを送信する関数
-const sendMessage = onCall<Message, void>(
+const sendMessage = onCall<SendingMessage, void>(
   async (request) =>
     await messageController.sendMessage(request.data, request.auth)
 )
 
 // メッセージを送信するタスク
-const scheduleMessage = onTaskDispatched<Message>(
+const scheduleMessage = onTaskDispatched<SendingMessage>(
   messageController.messageTaskOptions,
   async (request) => await messageController.messageTask(request.data)
 )

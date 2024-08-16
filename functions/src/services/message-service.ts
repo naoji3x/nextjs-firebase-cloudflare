@@ -1,11 +1,11 @@
-import { Message } from '@/types/message'
 import { getFunctions } from 'firebase-admin/functions'
 import { getMessaging } from 'firebase-admin/messaging'
 import { logger } from 'firebase-functions/v2'
+import { SendingMessage } from 'shared/types/message'
 import { getFunctionUrl } from './tasks'
 
 // メッセージを送信する
-export const sendMessage = async (message: Message) => {
+export const sendMessage = async (message: SendingMessage) => {
   logger.info('now sending messages : ' + JSON.stringify(message))
   const res = await getMessaging().sendEachForMulticast({
     notification: { title: message.title, body: message.body },
@@ -25,7 +25,7 @@ export const sendMessage = async (message: Message) => {
 export const queueMessage = async (
   id: string, // タスクのID
   scheduleTime: Date, // タスクの実行予定時刻
-  message: Message, // 送信するメッセージ
+  message: SendingMessage, // 送信するメッセージ
   region = 'asia-northeast1', // リージョン
   funcName = 'message-task' // 関数名
 ) => {

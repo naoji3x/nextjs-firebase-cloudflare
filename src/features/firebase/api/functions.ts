@@ -1,8 +1,7 @@
 import { getFunctions } from '@/features/firebase/client'
 import { Auth } from '@/types/auth'
-import { Message } from '@/types/message'
 import { httpsCallable } from 'firebase/functions'
-// import { httpsCallable } from 'firebase/functions'
+import { SendingMessage } from 'shared/types/message'
 
 export const helloWorldKebab = async () =>
   (await httpsCallable<void, string>(getFunctions(), 'hello-world-kebab')())
@@ -18,8 +17,11 @@ export const sendMessage = async (
   body: string,
   tokens: string[]
 ): Promise<void> => {
-  const func = httpsCallable<Message, void>(getFunctions(), 'message-send')
-  const message: Message = {
+  const func = httpsCallable<SendingMessage, void>(
+    getFunctions(),
+    'message-send'
+  )
+  const message: SendingMessage = {
     title,
     body,
     tokens
