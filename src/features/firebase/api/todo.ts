@@ -1,6 +1,5 @@
 'use client'
 
-import { getFirestore, getStorage } from '@/features/firebase/client'
 import { randomUUID } from 'crypto'
 import 'firebase/firestore'
 import {
@@ -14,8 +13,9 @@ import {
   setDoc
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { todoConverter } from 'shared/types/firebase/todo-firebase'
 import { Todo, TodoInput } from 'shared/types/todo'
+import { getFirestore, getStorage } from '../client'
+import { todoConverter } from '../types/todo-firebase'
 
 const collectionName = (uid: string) => `users/${uid}/todos`
 

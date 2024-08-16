@@ -62,7 +62,7 @@ describe('todo', () => {
     await getTestEnv().cleanup()
   })
 
-  it('should add dnd deletes a todo', async () => {
+  it('should add and delete a todo', async () => {
     const todo = {
       title: 'title',
       instruction: 'instruction',

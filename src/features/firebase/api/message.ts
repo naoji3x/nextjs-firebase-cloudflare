@@ -1,6 +1,6 @@
-import { getFirebaseApp } from '@/features/firebase/client'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import { ReceivedMessage } from 'shared/types/message'
+import { getFirebaseApp } from '../client'
 
 export const onMessageReceived = (
   callback: (message: ReceivedMessage) => void

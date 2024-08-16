@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { upsertDeviceToken } from '@/features/firebase/api/device-token'
 import {
   getAuth,
   helloWorldKebab,
@@ -22,16 +23,15 @@ import {
   doTodo,
   getImageUrl
 } from '@/features/firebase/api/todo'
-import { upsertToken } from '@/features/firebase/api/user'
 import { useMessage } from '@/features/firebase/hooks/message'
 import { useTodos } from '@/features/firebase/hooks/todos'
 import { useSpeechToast } from '@/hooks/speech-toast'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
-import { Auth } from '@/types/auth'
 import { Label } from '@radix-ui/react-label'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { Auth } from 'shared/types/auth'
 import { Todo } from 'shared/types/todo'
 
 const Card = ({
@@ -90,7 +90,7 @@ const Home = () => {
     const token: string = messaging.token
     const func = async () => {
       console.log('requesting permission')
-      await upsertToken(user.uid, token)
+      await upsertDeviceToken(user.uid, token)
       console.log('getting token')
     }
     func()
