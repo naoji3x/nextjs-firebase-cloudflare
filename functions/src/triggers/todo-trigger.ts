@@ -1,9 +1,9 @@
 import * as messageService from '@/services/message-service'
+import { todoFirebaseSchema } from '@/types/todo'
 import { randomUUID } from 'crypto'
 import { Firestore } from 'firebase-admin/firestore'
 import * as logger from 'firebase-functions/logger'
 import { DocumentSnapshot } from 'firebase-functions/v2/firestore'
-import { isDeepStrictEqual } from 'util'
 
 // todo メッセージをキューに登録する関数
 const queueMessage = async (
@@ -57,8 +57,8 @@ export const todoCreated = async (
     firestore,
     uid,
     scheduledAt.toDate(),
-    snapshot?.data()?.title,
-    snapshot?.data()?.instruction
+    snapshot?.data()?.title || 'todoApp',
+    snapshot?.data()?.instruction || 'todoApp Instruction'
   )
 
   return taskId ? await snapshot.ref.set({ taskId }, { merge: true }) : null
@@ -72,33 +72,50 @@ export const todoUpdated = async (
   snapshotBefore?: DocumentSnapshot,
   snapshotAfter?: DocumentSnapshot
 ) => {
-  const before = {
-    scheduledAt: snapshotBefore?.data()?.scheduledAt,
-    title: snapshotBefore?.data()?.title,
-    instruction: snapshotBefore?.data()?.instruction
-  }
+  logger.info(snapshotBefore?.data())
 
-  const after = {
-    scheduledAt: snapshotAfter?.data()?.scheduledAt,
-    title: snapshotAfter?.data()?.title,
-    instruction: snapshotAfter?.data()?.instruction
+  const parsedDataBefore = todoFirebaseSchema.safeParse(snapshotBefore?.data())
+  if (!parsedDataBefore.success) {
+    logger.info(parsedDataBefore.error.errors.map((e) => e.message).join('\n'))
+    return null
   }
+  const todoBefore = parsedDataBefore.data
 
-  if (isDeepStrictEqual(before, after)) {
+  const parsedDataAfter = todoFirebaseSchema.safeParse(snapshotAfter?.data())
+  if (!parsedDataAfter.success) {
+    return null
+  }
+  const todoAfter = parsedDataAfter.data
+
+  if (
+    todoBefore.scheduledAt.isEqual(todoAfter.scheduledAt) &&
+    todoBefore.title === todoAfter.title &&
+    todoBefore.instruction === todoAfter.instruction
+  ) {
     return null
   }
 
-  let taskId = snapshotBefore?.data()?.taskId
-  if (taskId) {
-    await messageService.deleteTask(taskId)
+  logger.info(todoBefore)
+  logger.info(todoAfter)
+
+  // まだ予定が実施されていないものは、関連するタスクを削除する。
+  const now = new Date()
+  if (todoBefore.scheduledAt.toDate().getTime() > now.getTime()) {
+    if (todoBefore?.taskId) {
+      await messageService.deleteTask(todoBefore?.taskId)
+    }
   }
-  taskId = await queueMessage(
-    firestore,
-    uid,
-    after.scheduledAt.toDate(),
-    after.title,
-    after.instruction
-  )
+
+  let taskId = null
+  if (todoAfter.scheduledAt.toDate().getTime() > now.getTime()) {
+    taskId = await queueMessage(
+      firestore,
+      uid,
+      todoAfter.scheduledAt.toDate(),
+      todoAfter.title || 'todoApp',
+      todoAfter.instruction
+    )
+  }
 
   return taskId
     ? await snapshotAfter?.ref.set({ taskId }, { merge: true })

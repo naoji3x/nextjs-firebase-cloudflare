@@ -10,8 +10,8 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  setDoc,
-  Timestamp
+  serverTimestamp,
+  setDoc
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { Todo, todoConverter, TodoInput } from 'shared/types/todo'
@@ -42,17 +42,20 @@ export const getImageUrl = async (image?: string) =>
 
 export const addTodo = async (
   uid: string,
-  { title, instruction, scheduledAt, done, imageBlob }: addTodoInput
+  todoToAdd: addTodoInput
+  // { title, instruction, scheduledAt, done, imageBlob }: addTodoInput
 ) => {
-  const imagePath = imageBlob ? await handleUpload(imageBlob) : undefined
-  const todo: TodoInput = {
-    title,
-    instruction,
-    scheduledAt,
-    done,
+  const imagePath = todoToAdd.imageBlob
+    ? await handleUpload(todoToAdd.imageBlob)
+    : undefined
+  const todo = {
+    ...(todoToAdd as TodoInput),
     ...(imagePath ? { image: imagePath } : {})
   }
-  const now = Timestamp.now().toDate()
+
+  console.log(todo)
+
+  const now = serverTimestamp()
   const docRef = await addDoc(collection(getFirestore(), collectionName(uid)), {
     ...todo,
     createdAt: now,
@@ -69,21 +72,21 @@ export const deleteTodo = async (uid: string, id: string) => {
 export const updateTodo = async (
   uid: string,
   id: string,
-  update: updateTodoInput
+  todoToUpdate: updateTodoInput
 ) => {
   const docRef = doc(getFirestore(), collectionName(uid), id)
   let image = undefined
-  if (update.imageBlob) {
-    image = await handleUpload(update.imageBlob)
-    delete update.imageBlob
+  if (todoToUpdate.imageBlob) {
+    image = await handleUpload(todoToUpdate.imageBlob)
+    delete todoToUpdate.imageBlob
   }
 
   await setDoc(
     docRef,
     {
-      ...update,
+      ...todoToUpdate,
       ...(image ? { image } : {}),
-      updatedAt: Timestamp.now().toDate()
+      updatedAt: serverTimestamp()
     },
     { merge: true }
   )
@@ -91,11 +94,7 @@ export const updateTodo = async (
 
 export const doTodo = async (uid: string, id: string, done = true) => {
   const docRef = doc(getFirestore(), collectionName(uid), id)
-  await setDoc(
-    docRef,
-    { done, updatedAt: Timestamp.now().toDate() },
-    { merge: true }
-  )
+  await setDoc(docRef, { done, updatedAt: serverTimestamp() }, { merge: true })
 }
 
 export const getTodo = async (uid: string, id: string) => {

@@ -1,4 +1,4 @@
-import { FirestoreDataConverter, Timestamp } from 'firebase/firestore'
+import { FirestoreDataConverter, Timestamp } from 'firebase-admin/firestore'
 import { z } from 'zod'
 import { firebaseTimestamps, timestamps, WithId } from './utils'
 

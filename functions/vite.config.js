@@ -10,11 +10,13 @@ export default defineConfig({
       output: {
         format: 'cjs' // commonjs形式で出力
       }
+      // external: ['../shared'] // expressを外部モジュールとして扱う
     }
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src') // エイリアス設定
+      '@': path.resolve(__dirname, 'src'), // エイリアス設定
+      shared: path.resolve(__dirname, '../shared') // エイリアス設定
     }
   },
   plugins: [
