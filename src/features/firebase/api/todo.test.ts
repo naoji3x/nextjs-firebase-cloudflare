@@ -9,10 +9,8 @@ import {
   updateTodo
 } from '@/features/firebase/api/todo'
 import { addDoc, collection, deleteDoc } from 'firebase/firestore'
-//import { addDoc, collection } from 'firebase/firestore'
 import { readFileSync } from 'fs'
 import { Todo } from 'shared/types/todo'
-//import { Todo } from 'shared/types/todo'
 import {
   getTestEnv,
   initializeTestEnvironment
@@ -128,7 +126,7 @@ describe('todo', () => {
     expect(newTodo?.image).toBeTruthy()
   })
 
-  it.only('should listen to todos changes', async () => {
+  it('should listen to todos changes', async () => {
     let todos: Todo[] = []
 
     const unsubscribe = onTodosChanged(userId, (newTodos) => {

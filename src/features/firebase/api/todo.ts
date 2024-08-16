@@ -40,20 +40,15 @@ type updateTodoInput = Partial<Omit<todoInput, 'uid'>>
 export const getImageUrl = async (image?: string) =>
   image ? await getDownloadURL(ref(getStorage(), image)) : ''
 
-export const addTodo = async (
-  uid: string,
-  todoToAdd: addTodoInput
-  // { title, instruction, scheduledAt, done, imageBlob }: addTodoInput
-) => {
+export const addTodo = async (uid: string, todoToAdd: addTodoInput) => {
   const imagePath = todoToAdd.imageBlob
     ? await handleUpload(todoToAdd.imageBlob)
     : undefined
+  delete todoToAdd.imageBlob
   const todo = {
-    ...(todoToAdd as TodoInput),
+    ...todoToAdd,
     ...(imagePath ? { image: imagePath } : {})
   }
-
-  console.log(todo)
 
   const now = serverTimestamp()
   const docRef = await addDoc(collection(getFirestore(), collectionName(uid)), {

@@ -37,7 +37,7 @@ export const todoConverter: FirestoreDataConverter<Todo> = {
   },
   // date型をTimestampから元に戻す。
   fromFirestore: (snapshot) => {
-    const data = snapshot.data()
+    const data = snapshot.data({ serverTimestamps: 'estimate' })
     const parsedData = todoFirebaseSchema.safeParse(data)
     if (!parsedData.success) {
       throw new Error(parsedData.error.errors.map((e) => e.message).join('\n'))
