@@ -9,7 +9,7 @@ let auth: GoogleAuth | null
  * @param {string} location the function's location
  * @return {Promise<string>} The URL of the function
  */
-export const getFunctionUrl = async (name: string, location: string) => {
+export const getFunctionUri = async (name: string, location: string) => {
   if (!auth) {
     auth = new GoogleAuth({
       scopes: 'https://www.googleapis.com/auth/cloud-platform'

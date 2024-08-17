@@ -2,7 +2,7 @@ import { getFunctions } from 'firebase-admin/functions'
 import { getMessaging } from 'firebase-admin/messaging'
 import { logger } from 'firebase-functions/v2'
 import { SendingMessage } from 'shared/types/message'
-import { getFunctionUrl } from './tasks'
+import { getFunctionUri } from './function-uri'
 
 // メッセージを送信する
 export const sendMessage = async (message: SendingMessage) => {
@@ -32,7 +32,7 @@ export const queueMessage = async (
   const queue = getFunctions().taskQueue(
     `locations/${region}/functions/${funcName}`
   )
-  const targetUri = await getFunctionUrl(funcName, region)
+  const targetUri = await getFunctionUri(funcName, region)
   const func = queue.enqueue(message, { scheduleTime, uri: targetUri, id })
   await Promise.all([func])
 }
