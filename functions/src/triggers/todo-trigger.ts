@@ -1,44 +1,8 @@
 import * as messageService from '@/services/message-service'
+import { queueTodoMessage } from '@/services/todo-message-service'
 import { todoFirebaseSchema } from '@/types/todo'
-import { randomUUID } from 'crypto'
 import { Firestore } from 'firebase-admin/firestore'
-import * as logger from 'firebase-functions/logger'
 import { DocumentSnapshot } from 'firebase-functions/v2/firestore'
-
-// todo メッセージをキューに登録する関数
-const queueMessage = async (
-  firestore: Firestore,
-  uid: string,
-  scheduledAt: Date,
-  title: string,
-  body: string
-): Promise<string | undefined> => {
-  logger.info('now queueing message ...')
-
-  const userRef = firestore.collection('users').doc(uid)
-  const userSnapshot = await userRef.get()
-  let taskId = undefined
-  if (userSnapshot.exists) {
-    logger.info(
-      'now creating task ... ' + JSON.stringify(userSnapshot.get('tokens')),
-      {
-        structuredData: true
-      }
-    )
-    const tokens = userSnapshot.get('tokens') || []
-    if (tokens.length > 0) {
-      if (scheduledAt > new Date()) {
-        taskId = randomUUID()
-        await messageService.queueMessage(taskId, scheduledAt, {
-          title,
-          body,
-          tokens
-        })
-      }
-    }
-  }
-  return taskId
-}
 
 // Firestoreのデータを作成する際に、taskを登録する。
 export const todoCreated = async (
@@ -48,12 +12,13 @@ export const todoCreated = async (
   snapshot?: DocumentSnapshot
 ) => {
   if (!snapshot) return null
+
   const scheduledAt = snapshot?.data()?.scheduledAt
   if (!scheduledAt) {
     return null
   }
 
-  const taskId = await queueMessage(
+  const taskId = await queueTodoMessage(
     firestore,
     uid,
     scheduledAt.toDate(),
@@ -102,7 +67,7 @@ export const todoUpdated = async (
 
   let taskId = null
   if (todoAfter.scheduledAt.toDate().getTime() > now.getTime()) {
-    taskId = await queueMessage(
+    taskId = await queueTodoMessage(
       firestore,
       uid,
       todoAfter.scheduledAt.toDate(),

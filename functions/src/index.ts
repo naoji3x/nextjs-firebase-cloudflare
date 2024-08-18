@@ -82,7 +82,7 @@ const scheduleMessage = onTaskDispatched<SendingMessage>(
 
 // Firestoreのデータを作成する際に、createdAtとupdatedAtを挿入する。
 const todoCreated = onDocumentCreated(
-  '/users/{uid}/todos/{todoId}',
+  'users/{uid}/todos/{todoId}',
   async (event) =>
     await todoTrigger.todoCreated(
       firestore,
@@ -94,7 +94,7 @@ const todoCreated = onDocumentCreated(
 
 // Firestoreのデータを書き換える際に、updatedAtを更新する。
 const todoUpdated = onDocumentUpdated(
-  '/users/{uid}/todos/{todoId}',
+  'users/{uid}/todos/{todoId}',
   async (event) =>
     await todoTrigger.todoUpdated(
       firestore,
@@ -107,7 +107,7 @@ const todoUpdated = onDocumentUpdated(
 
 // Firestoreのデータを削除するときに、関連するタスクを削除する。
 const todoDeleted = onDocumentDeleted(
-  '/users/{uid}/todos/{todoId}',
+  'users/{uid}/todos/{todoId}',
   async (event) => await todoTrigger.todoDeleted(event.data)
 )
 
