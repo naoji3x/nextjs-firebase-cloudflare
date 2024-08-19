@@ -1,11 +1,10 @@
-import * as messageService from '@/services/message-service'
+import { getFirestore } from '@/lib/admin'
+import { queueMessage } from '@/services/message-service'
 import { randomUUID } from 'crypto'
-import { Firestore } from 'firebase-admin/firestore'
-import * as logger from 'firebase-functions/logger'
+import { logger } from 'firebase-functions/v2'
 
 // todo メッセージをキューに登録する関数
 export const queueTodoMessage = async (
-  firestore: Firestore,
   uid: string,
   scheduledAt: Date,
   title: string,
@@ -13,7 +12,7 @@ export const queueTodoMessage = async (
 ): Promise<string | undefined> => {
   logger.info('now queueing message ...')
 
-  const userRef = firestore.collection('users').doc(uid)
+  const userRef = getFirestore().collection('users').doc(uid)
   const userSnapshot = await userRef.get()
   let taskId = undefined
   if (userSnapshot.exists) {
@@ -27,7 +26,7 @@ export const queueTodoMessage = async (
     if (tokens.length > 0) {
       if (scheduledAt > new Date()) {
         taskId = randomUUID()
-        await messageService.queueMessage(taskId, scheduledAt, {
+        await queueMessage(taskId, scheduledAt, {
           title,
           body,
           tokens

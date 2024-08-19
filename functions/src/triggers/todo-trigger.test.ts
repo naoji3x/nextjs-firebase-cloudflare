@@ -1,6 +1,6 @@
 import { todo as todoFuncs } from '@/index'
+import { getFirestore } from '@/lib/admin'
 import { randomUUID } from 'crypto'
-import { getFirestore } from 'firebase-admin/firestore'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { makeChange } from 'firebase-functions-test/lib/v1'
 

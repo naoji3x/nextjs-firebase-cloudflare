@@ -1,16 +1,10 @@
 import * as messageService from '@/services/message-service'
 import { queueTodoMessage } from '@/services/todo-message-service'
 import { todoFirebaseSchema } from '@/types/todo'
-import { Firestore } from 'firebase-admin/firestore'
 import { DocumentSnapshot } from 'firebase-functions/v2/firestore'
 
 // Firestoreのデータを作成する際に、taskを登録する。
-export const todoCreated = async (
-  firestore: Firestore,
-  uid: string,
-  todoId: string,
-  snapshot?: DocumentSnapshot
-) => {
+export const todoCreated = async (uid: string, snapshot?: DocumentSnapshot) => {
   if (!snapshot) return null
 
   const scheduledAt = snapshot?.data()?.scheduledAt
@@ -19,7 +13,6 @@ export const todoCreated = async (
   }
 
   const taskId = await queueTodoMessage(
-    firestore,
     uid,
     scheduledAt.toDate(),
     snapshot?.data()?.title || 'todoApp',
@@ -31,9 +24,7 @@ export const todoCreated = async (
 
 // Firestoreのデータを書き換える際に、必要に応じてtaskを再登録する。
 export const todoUpdated = async (
-  firestore: Firestore,
   uid: string,
-  todoId: string,
   snapshotBefore?: DocumentSnapshot,
   snapshotAfter?: DocumentSnapshot
 ) => {
@@ -68,7 +59,6 @@ export const todoUpdated = async (
   let taskId = null
   if (todoAfter.scheduledAt.toDate().getTime() > now.getTime()) {
     taskId = await queueTodoMessage(
-      firestore,
       uid,
       todoAfter.scheduledAt.toDate(),
       todoAfter.title || 'todoApp',
