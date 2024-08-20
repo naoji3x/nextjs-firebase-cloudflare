@@ -16,7 +16,7 @@ jest.mock('../services/message-service', () => ({
 }))
 
 const { wrap, firestore } = firebaseFunctionsTest({
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID
+  projectId: process.env.FUNCTIONS_PROJECT_ID
 })
 const { makeDocumentSnapshot } = firestore
 

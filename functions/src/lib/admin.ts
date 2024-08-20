@@ -15,8 +15,7 @@ export const initialize = () => {
     return
   }
   initialized = true
-
-  const region = process.env.FIREBASE_REGION
+  const region = process.env.FUNCTIONS_REGION
 
   // v2のregionを設定
   setGlobalOptions({ region })

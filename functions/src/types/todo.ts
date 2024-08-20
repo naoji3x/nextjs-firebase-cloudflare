@@ -8,3 +8,5 @@ export const todoFirebaseSchema = z.object({
   ...todoBase,
   ...firebaseTimestamps
 })
+
+export type TodoFirebase = z.infer<typeof todoFirebaseSchema>
