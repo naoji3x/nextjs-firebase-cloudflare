@@ -10,7 +10,7 @@ import { setGlobalOptions } from 'firebase-functions/v2/options'
 let initialized = false
 let firestore: Firestore
 
-export const initialize = () => {
+const initialize = () => {
   if (initialized) {
     return
   }
