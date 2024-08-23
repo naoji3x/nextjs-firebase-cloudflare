@@ -2,11 +2,11 @@ pre-push:
   commands:
     frontend-packages-audit:
       tags: frontend security
-      run: npm audit --production
+      run: npm audit --omit=dev
     functions-packages-audit:
       tags: functions security
       root: functions
-      run: npm audit --production
+      run: npm audit --omit=dev
 
 pre-commit:
   parallel: true
