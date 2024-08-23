@@ -1,12 +1,17 @@
-import * as messageService from '@/services/message-service'
+import { sendMessage as _sendMessage } from '@/services/message-service'
+import { HttpsError } from 'firebase-functions/v2/https'
 import { Auth } from 'shared/types/auth'
 import { SendingMessage } from 'shared/types/message'
 
 // メッセージを送信する関数
 export const sendMessage = async (message?: SendingMessage, auth?: Auth) => {
-  if (!auth) return
-  if (!message) return
-  await messageService.sendMessage(message)
+  if (!message) {
+    throw new HttpsError('invalid-argument', 'message is undefined')
+  }
+  if (!auth) {
+    throw new HttpsError('unauthenticated', 'auth is undefined')
+  }
+  await _sendMessage(message)
 }
 
 // メッセージを送信するタスク
@@ -21,4 +26,4 @@ export const messageTaskOptions = {
 }
 
 export const messageTask = async (message: SendingMessage) =>
-  await messageService.sendMessage(message)
+  await _sendMessage(message)

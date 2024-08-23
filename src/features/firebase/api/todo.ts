@@ -12,20 +12,28 @@ import {
   serverTimestamp,
   setDoc
 } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes
+} from 'firebase/storage'
 import { Todo, TodoInput } from 'shared/types/todo'
 import { getFirestore, getStorage } from '../client'
 import { todoConverter } from '../types/todo-firebase'
 
 const collectionName = (uid: string) => `users/${uid}/todos`
 
-const handleUpload = async (blob: Blob): Promise<string | null> => {
+const handleUpload = async (
+  blob: Blob,
+  uid: string
+): Promise<string | null> => {
   if (!blob) return null
   const path = 'images/' + randomUUID()
   console.log('Uploading file... ' + path)
   const storageRef = ref(getStorage(), path)
   try {
-    await uploadBytes(storageRef, blob)
+    await uploadBytes(storageRef, blob, { customMetadata: { owner: uid } })
     console.log('File uploaded successfully')
     return path
   } catch (error) {
@@ -39,11 +47,11 @@ type addTodoInput = todoInput
 type updateTodoInput = Partial<Omit<todoInput, 'uid'>>
 
 export const getImageUrl = async (image?: string) =>
-  image ? await getDownloadURL(ref(getStorage(), image)) : ''
+  image ? await getDownloadURL(ref(getStorage(), image)) : undefined
 
 export const addTodo = async (uid: string, todoToAdd: addTodoInput) => {
   const imagePath = todoToAdd.imageBlob
-    ? await handleUpload(todoToAdd.imageBlob)
+    ? await handleUpload(todoToAdd.imageBlob, uid)
     : undefined
   delete todoToAdd.imageBlob
   const todo = {
@@ -61,7 +69,17 @@ export const addTodo = async (uid: string, todoToAdd: addTodoInput) => {
 }
 
 export const deleteTodo = async (uid: string, id: string) => {
-  const docRef = doc(getFirestore(), collectionName(uid), id)
+  const docRef = doc(getFirestore(), collectionName(uid), id).withConverter(
+    todoConverter
+  )
+  const docSnap = await getDoc(docRef)
+  if (docSnap.exists()) {
+    const { image } = docSnap.data()
+    if (image) {
+      const imageRef = ref(getStorage(), image)
+      await deleteObject(imageRef)
+    }
+  }
   await deleteDoc(docRef)
 }
 
@@ -73,7 +91,7 @@ export const updateTodo = async (
   const docRef = doc(getFirestore(), collectionName(uid), id)
   let image = undefined
   if (todoToUpdate.imageBlob) {
-    image = await handleUpload(todoToUpdate.imageBlob)
+    image = await handleUpload(todoToUpdate.imageBlob, uid)
     delete todoToUpdate.imageBlob
   }
 

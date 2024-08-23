@@ -1,4 +1,5 @@
 import { getAuth } from '@/controllers/auth-controller'
+import { HttpsError } from 'firebase-functions/v2/https'
 
 describe('auth-controller', () => {
   it('should return auth', async () => {
@@ -13,11 +14,25 @@ describe('auth-controller', () => {
     expect(result).toEqual(auth)
   })
 
-  it('should return null', async () => {
-    const result1 = getAuth(undefined)
-    expect(result1).toBeNull()
+  it('should throw https error if auth is undefined', async () => {
+    try {
+      getAuth(undefined)
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpsError)
+      const error = e as HttpsError
+      expect(error.message).toBe('auth is undefined')
+      expect(error.code).toBe('unauthenticated')
+    }
+  })
 
-    const result2 = getAuth()
-    expect(result2).toBeNull()
+  it('should throw https error with no argument', async () => {
+    try {
+      getAuth()
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpsError)
+      const error = e as HttpsError
+      expect(error.message).toBe('auth is undefined')
+      expect(error.code).toBe('unauthenticated')
+    }
   })
 })

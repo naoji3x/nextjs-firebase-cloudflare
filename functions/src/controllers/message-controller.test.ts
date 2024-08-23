@@ -1,4 +1,5 @@
 import { messageTask, sendMessage } from '@/controllers/message-controller'
+import { HttpsError } from 'firebase-functions/v2/https'
 import { SendingMessage } from 'shared/types/message'
 
 const sendMessageMock = jest.fn()
@@ -34,5 +35,27 @@ describe('message-controller', () => {
   it('should call sendMessage by messageTask', async () => {
     await messageTask(message)
     expect(sendMessageMock).toHaveBeenCalledWith(message)
+  })
+
+  it('should throw https error if auth is undefined', async () => {
+    try {
+      await sendMessage(message, undefined)
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpsError)
+      const error = e as HttpsError
+      expect(error.message).toBe('auth is undefined')
+      expect(error.code).toBe('unauthenticated')
+    }
+  })
+
+  it('should throw https error if message is undefined', async () => {
+    try {
+      await sendMessage(undefined, auth)
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpsError)
+      const error = e as HttpsError
+      expect(error.message).toBe('message is undefined')
+      expect(error.code).toBe('invalid-argument')
+    }
   })
 })

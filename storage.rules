@@ -1,9 +1,23 @@
 rules_version = '2';
+
 service firebase.storage {
   match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.resource.contentType.matches('image/.*');
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwn(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isCreatedByOwner() {
+      return resource == null && isOwn(request.resource.metadata.owner);
+    }
+    function isUpdatedByOwner() {
+      return resource != null && isOwn(resource.metadata.owner);
+    }
+
+    match /images/{imageId} {
+      allow read: if isSignedIn();
+      allow write: if isCreatedByOwner() || isUpdatedByOwner();
     }
   }
 }

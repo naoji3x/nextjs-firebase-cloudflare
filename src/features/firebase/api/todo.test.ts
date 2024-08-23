@@ -4,10 +4,13 @@ import {
   addTodo,
   deleteTodo,
   doTodo,
+  getImageUrl,
   getTodo,
   onTodosChanged,
   updateTodo
 } from '@/features/firebase/api/todo'
+import { assertSucceeds } from '@firebase/rules-unit-testing'
+import { FirebaseError } from 'firebase/app'
 import { addDoc, collection, deleteDoc } from 'firebase/firestore'
 import { readFileSync } from 'fs'
 import { Todo } from 'shared/types/todo'
@@ -110,7 +113,7 @@ describe('todo', () => {
     expect(deletedTodo).toBeNull()
   })
 
-  it('should add a todo with an image', async () => {
+  it('should add a todo with an image and remove it', async () => {
     const blob = readBlob('tests/assets/sample.png', 'sample.png')
     const id = await addTodo(userId, {
       title: 'title',
@@ -124,6 +127,11 @@ describe('todo', () => {
     const newTodo = await getTodo(userId, id)
     expect(newTodo).not.toBeNull()
     expect(newTodo?.image).toBeTruthy()
+
+    assertSucceeds(getImageUrl(newTodo?.image))
+
+    await deleteTodo(userId, id)
+    await expect(getImageUrl(newTodo?.image)).rejects.toThrow(FirebaseError)
   })
 
   it('should listen to todos changes', async () => {
