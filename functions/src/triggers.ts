@@ -1,9 +1,11 @@
+import { initialize } from '@/lib/admin'
 import * as todoTrigger from '@/triggers/todo-trigger'
 import {
   onDocumentCreated,
   onDocumentDeleted,
   onDocumentUpdated
 } from 'firebase-functions/v2/firestore'
+initialize()
 
 // Firestoreのデータを作成する際に、createdAtとupdatedAtを挿入する。
 export const todoCreated = onDocumentCreated(

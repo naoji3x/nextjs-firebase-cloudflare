@@ -1,10 +1,12 @@
 import * as authController from '@/controllers/auth-controller'
 import * as helloController from '@/controllers/hello-controller'
 import * as messageController from '@/controllers/message-controller'
+import { initialize } from '@/lib/admin'
 import { onCall } from 'firebase-functions/v2/https'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
 import { Auth } from 'shared/types/auth'
 import { SendingMessage } from 'shared/types/message'
+initialize()
 
 // 以下の関数は、v2の関数のサンプル。関数名に大文字が使えないが、最後のexportの定義でケバブケースにする。
 export const helloWorldV2 = onCall<void, string>((request) =>
