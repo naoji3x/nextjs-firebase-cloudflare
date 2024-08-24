@@ -1,3 +1,4 @@
+import { config } from 'dotenv'
 import { initializeApp } from 'firebase-admin/app'
 import {
   getFirestore as _getFirestore,
@@ -6,6 +7,8 @@ import {
 import { TaskQueue } from 'firebase-admin/functions'
 import { logger } from 'firebase-functions/v2'
 import { setGlobalOptions } from 'firebase-functions/v2/options'
+
+config()
 
 let initialized = false
 let firestore: Firestore
@@ -17,6 +20,7 @@ export const initialize = () => {
   initialized = true
   const region = process.env.FUNCTIONS_REGION
 
+  logger.info('initialize admin: ', region)
   // v2のregionを設定
   setGlobalOptions({ region })
   initializeApp()
