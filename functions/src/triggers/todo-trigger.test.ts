@@ -1,5 +1,5 @@
-import { todo as todoFuncs } from '@/index'
 import { getFirestore } from '@/lib/admin'
+import { todoCreated, todoUpdated } from '@/triggers'
 import { randomUUID } from 'crypto'
 import firebaseFunctionsTest from 'firebase-functions-test'
 import { makeChange } from 'firebase-functions-test/lib/v1'
@@ -66,7 +66,7 @@ describe('todo-trigger', () => {
     }
 
     const snapshot = makeDocumentSnapshot(todo, docName(uid, todoId))
-    const wrapped = wrap(todoFuncs.created)
+    const wrapped = wrap(todoCreated)
     const event = {
       params: { uid, todoId },
       data: snapshot
@@ -94,7 +94,7 @@ describe('todo-trigger', () => {
       taskId: 'dummy-task-id'
     }
 
-    const wrapped = wrap(todoFuncs.updated)
+    const wrapped = wrap(todoUpdated)
     const snapBefore = makeDocumentSnapshot(todo, docName(uid, todoId))
     const snapAfter = makeDocumentSnapshot(
       { ...todo, title: 'updated title' },

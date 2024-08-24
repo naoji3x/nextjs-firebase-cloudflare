@@ -1,7 +1,7 @@
 'use client'
 
+import { signOut } from '#features/firebase/api/google-auth'
 import { getAuth as getFirebaseAuth } from '@/features/firebase/client'
-import { signOut } from '@/features/firebase/lib/google-auth'
 import {
   User as FirebaseUser,
   GoogleAuthProvider,
