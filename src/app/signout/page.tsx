@@ -1,5 +1,5 @@
 'use client'
-import { signOut } from '@/features/firebase/lib/google-auth'
+import { signOut } from '#features/firebase/api/google-auth'
 import { useEffect } from 'react'
 
 //

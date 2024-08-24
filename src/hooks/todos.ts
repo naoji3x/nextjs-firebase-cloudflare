@@ -1,6 +1,6 @@
 'use client'
 
-import { onTodosChanged } from '@/features/firebase/api/todo'
+import { onTodosChanged } from '#features/firebase/api/todo'
 import { useEffect, useState } from 'react'
 import { Todo } from 'shared/types/todo'
 

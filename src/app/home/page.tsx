@@ -1,5 +1,17 @@
 'use client'
 
+import { upsertDeviceToken } from '#features/firebase/api/device-token'
+import {
+  getAuth,
+  helloWorldKebab,
+  sendMessage
+} from '#features/firebase/api/functions'
+import {
+  addTodo,
+  deleteTodo,
+  doTodo,
+  getImageUrl
+} from '#features/firebase/api/todo'
 import DatePicker from '@/components/elements/date-picker'
 import TimePicker from '@/components/elements/time-picker'
 import TodoCard from '@/components/elements/todo-card'
@@ -11,21 +23,9 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { upsertDeviceToken } from '@/features/firebase/api/device-token'
-import {
-  getAuth,
-  helloWorldKebab,
-  sendMessage
-} from '@/features/firebase/api/functions'
-import {
-  addTodo,
-  deleteTodo,
-  doTodo,
-  getImageUrl
-} from '@/features/firebase/api/todo'
-import { useMessage } from '@/features/firebase/hooks/message'
-import { useTodos } from '@/features/firebase/hooks/todos'
+import { useMessage } from '@/hooks/message'
 import { useSpeechToast } from '@/hooks/speech-toast'
+import { useTodos } from '@/hooks/todos'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
 import { Label } from '@radix-ui/react-label'
@@ -43,7 +43,7 @@ const Card = ({
   onDelete: (id: string) => void
   onDone: (id: string, done: boolean) => void
 }) => {
-  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
   useEffect(() => {
     const func = async () => setImageUrl(await getImageUrl(todo.image))
     func()

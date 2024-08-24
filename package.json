@@ -18,6 +18,37 @@
     "shadcn": "npx shadcn-ui@latest add",
     "test": "jest"
   },
+  "imports": {
+    "#auth": {
+      "storybook": "./src/auth.mock.ts",
+      "default": "./src/auth.ts"
+    },
+    "#features/firebase/api/google-auth": {
+      "storybook": "./src/features/firebase/api/google-auth.mock.ts",
+      "default": "./src/features/firebase/api/google-auth.ts"
+    },
+    "#features/firebase/api/todo": {
+      "storybook": "./src/features/firebase/api/todo.mock.ts",
+      "default": "./src/features/firebase/api/todo.ts"
+    },
+    "#features/firebase/api/functions": {
+      "storybook": "./src/features/firebase/api/functions.mock.ts",
+      "default": "./src/features/firebase/api/functions.ts"
+    },
+    "#features/firebase/api/device-token": {
+      "storybook": "./src/features/firebase/api/device-token.mock.ts",
+      "default": "./src/features/firebase/api/device-token.ts"
+    },
+    "#features/firebase/api/message": {
+      "storybook": "./src/features/firebase/api/message.mock.ts",
+      "default": "./src/features/firebase/api/message.ts"
+    }
+  },
+  "#*": [
+    "./*",
+    "./*.ts",
+    "./*.tsx"
+  ],
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.0",
     "@radix-ui/react-checkbox": "1.1.1",
