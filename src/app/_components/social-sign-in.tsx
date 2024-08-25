@@ -1,4 +1,4 @@
-import { signIn } from '@/auth'
+import { signIn } from '#auth'
 import GoogleSignInButton from '@/components/elements/google-sign-in-button'
 import { Shell } from '@/components/shells/shell'
 import {

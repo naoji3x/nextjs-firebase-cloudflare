@@ -1,29 +1,18 @@
 'use client'
 
-import { signOut } from '#features/firebase/api/google-auth'
-import { getAuth as getFirebaseAuth } from '@/features/firebase/client'
 import {
-  User as FirebaseUser,
-  GoogleAuthProvider,
-  browserLocalPersistence,
-  setPersistence,
-  signInWithCredential
-} from 'firebase/auth'
+  signedInUser,
+  signIn,
+  UserContext
+} from '#features/firebase/api/google-auth'
 import { useSession } from 'next-auth/react'
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState
 } from 'react'
-
-type UserContext = {
-  name: string
-  email: string
-  uid: string
-  photoUrl?: string | null
-}
 
 export type UserContextType = UserContext | null | undefined
 
@@ -33,44 +22,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userContext, setUserContext] = useState<UserContextType>()
   const { data: session = null } = useSession()
 
-  const toUserContext = (user: FirebaseUser): UserContext => ({
-    name: user.displayName || '',
-    email: user.email || '',
-    uid: user.uid,
-    photoUrl: user.photoURL || ''
-  })
-
   useEffect(() => {
-    if (session) {
-      console.log('you are: ' + JSON.stringify(session.user))
-      const auth = getFirebaseAuth()
-      if (auth.currentUser) {
-        // サインインしている場合はユーザー情報を設定する。
-        setUserContext(toUserContext(auth.currentUser))
-      } else {
-        // サインインしていない場合はサインインしてユーザー情報を取得する。
-        const func = async () => {
-          try {
-            // ログイン情報を保持する
-            setPersistence(auth, browserLocalPersistence)
-            const cred = GoogleAuthProvider.credential(session?.user.id_token)
-            await signInWithCredential(auth, cred)
-            if (auth.currentUser) {
-              setUserContext(toUserContext(auth.currentUser))
-            } else {
-              // エラー時はとにかくサインアウトする
-              console.error('Failed to sign in')
-              await signOut()
-            }
-          } catch (error) {
-            // エラー時はとにかくサインアウトする
-            console.error(error)
-            await signOut()
-          }
-        }
-        func()
-      }
+    if (!session) {
+      return
     }
+
+    const currentUser = signedInUser()
+    if (currentUser) {
+      setUserContext(currentUser)
+      return
+    }
+    signIn(session.user.id_token, (user) => setUserContext(user))
   }, [session])
 
   return (

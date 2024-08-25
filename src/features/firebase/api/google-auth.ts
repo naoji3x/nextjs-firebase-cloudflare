@@ -9,20 +9,6 @@ import {
 import { signOut as signOutNextAuth } from 'next-auth/react'
 import { getAuth } from '../client'
 
-/*
-if (!session) {
-  return
-}
-console.log('you are: ' + JSON.stringify(session.user))
-
-const currentUser = signedInUser()
-if (currentUser) {
-  setUserContext(currentUser)
-  return
-}
-signIn(session.user.id_token, (user) => setUserContext(user))
-*/
-
 export type UserContext = {
   name: string
   email: string
