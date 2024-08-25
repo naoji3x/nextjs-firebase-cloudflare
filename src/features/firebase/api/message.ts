@@ -1,6 +1,12 @@
-import { getMessaging, onMessage } from 'firebase/messaging'
+import {
+  getMessaging,
+  getToken,
+  isSupported,
+  onMessage
+} from 'firebase/messaging'
 import { ReceivedMessage } from 'shared/types/message'
 import { getFirebaseApp } from '../client'
+import { firebaseEnv } from '../env.mjs'
 
 export const onMessageReceived = (
   callback: (message: ReceivedMessage) => void
@@ -27,4 +33,26 @@ export const onMessageReceived = (
   })
 
   return unsubscribe
+}
+
+export const getFcmToken = async (
+  checkSupportAndRegisterServiceWorker: boolean
+) => {
+  if (checkSupportAndRegisterServiceWorker) {
+    if (!(await isSupported())) {
+      console.log("messaging isn't supported.")
+      return null
+    }
+    console.log('messaging is supported.')
+    // https://github.com/firebase/firebase-js-sdk/issues/7693
+    navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+      scope: '/firebase-cloud-messaging-push-scope'
+    })
+  }
+
+  const messaging = getMessaging(getFirebaseApp())
+  const token = await getToken(messaging, {
+    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
+  })
+  return token
 }

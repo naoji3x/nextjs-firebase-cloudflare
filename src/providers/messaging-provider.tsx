@@ -1,7 +1,6 @@
 'use client'
-import { getFirebaseApp } from '@/features/firebase/client'
-import { firebaseEnv } from '@/features/firebase/env.mjs'
-import { getMessaging, getToken, isSupported } from 'firebase/messaging'
+
+import { getFcmToken } from '#features/firebase/api/message'
 import {
   ReactNode,
   createContext,
@@ -30,22 +29,11 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
       const func = async () => {
         console.log('getting token ...')
         try {
-          const supported = await isSupported()
-          let token: string | null = null
-          if (supported) {
-            // https://github.com/firebase/firebase-js-sdk/issues/7693
-            navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-              scope: '/firebase-cloud-messaging-push-scope'
-            })
-            console.log('messaging is supported.')
-            const messaging = getMessaging(getFirebaseApp())
-            token = await getToken(messaging, {
-              vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
-            })
-            console.log('token is successfully obtained.')
+          const token = await getFcmToken(true)
+          if (token) {
             setTokenContext(() => ({
               token,
-              supported
+              supported: true
             }))
           } else {
             console.log("messaging isn't supported.")
@@ -63,10 +51,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
   const onClickTokenButton = async () => {
     console.log('retry getting token')
     setDisabled(true)
-    const messaging = getMessaging(getFirebaseApp())
-    const token = await getToken(messaging, {
-      vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
-    })
+    const token = await getFcmToken(false)
     setTokenContext({ token, supported: true })
   }
 
