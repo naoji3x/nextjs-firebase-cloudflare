@@ -6,8 +6,11 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  manifest: '/manifest.json',
   title: 'Todo App',
-  description: 'Store and Remind your Todos!'
+  description: 'Save and Get Reminders for Your Todos!',
+  viewport:
+    'width=device-width, initial-scale=1, maximum-scale=1 viewport-fit=cover'
 }
 
 const RootLayout = ({

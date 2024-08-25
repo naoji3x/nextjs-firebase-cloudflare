@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { env } from '@/env.mjs'
 import { useMessage } from '@/hooks/message'
 import { useSpeechToast } from '@/hooks/speech-toast'
 import { useTodos } from '@/hooks/todos'
@@ -286,7 +287,7 @@ const Home = () => {
 
       <footer className="w-full bg-foreground text-background  py-4">
         <div className="container mx-auto px-4 text-center">
-          <p>nextjs-firebase-frontend</p>
+          <p>nextjs-firebase-frontend: ver. {env.NEXT_PUBLIC_VERSION}</p>
         </div>
       </footer>
     </div>
