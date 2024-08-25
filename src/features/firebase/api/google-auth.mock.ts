@@ -1,14 +1,15 @@
+import { UserContext } from '@/features/firebase/api/google-auth'
 import { fn } from '@storybook/test'
 
 const userContext = {
-  name: 'Test User',
-  email: 'test.user@email.com',
+  name: 'Dummy User',
+  email: 'dummy.user@example.com',
   uid: 'test-user-uid'
 }
 
-export const signedInUser = fn().mockReturnValue(userContext)
-export const signIn = fn().mockImplementation(
-  async (idToken: string, signedIn: (user: typeof userContext) => void) => {
+export const signedInUser = fn(() => userContext)
+export const signIn = fn(
+  async (idToken: string, signedIn: (user: UserContext) => void) => {
     signedIn(userContext)
   }
 )
