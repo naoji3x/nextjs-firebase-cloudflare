@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint --ext .tss,.js .",
+    "lint": "eslint --ext .ts,.js .",
     "build": "vite build",
     "build:watch": "vite build --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
@@ -16,6 +16,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "dotenv": "16.4.5",
     "firebase-admin": "12.3.1",
     "firebase-functions": "5.0.1",
     "zod": "3.23.8"
@@ -23,7 +24,6 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.1.0",
     "@typescript-eslint/parser": "8.1.0",
-    "dotenv": "16.4.5",
     "eslint-config-google": "0.14.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
