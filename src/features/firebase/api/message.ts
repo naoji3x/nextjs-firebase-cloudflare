@@ -45,7 +45,7 @@ export const getFcmToken = async (
     }
     console.log('messaging is supported.')
     // https://github.com/firebase/firebase-js-sdk/issues/7693
-    navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+    await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
       scope: '/firebase-cloud-messaging-push-scope'
     })
   }
