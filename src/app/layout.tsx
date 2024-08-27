@@ -12,9 +12,34 @@ export const viewport: Viewport = {
   viewportFit: 'cover'
 }
 
+const APP_NAME = 'Todo App'
+const APP_DEFAULT_TITLE = 'My Awesome Todo App'
+const APP_TITLE_TEMPLATE = '%s - Todo App'
+const APP_DESCRIPTION = 'Save and Get Reminders for Your Todos!'
 export const metadata: Metadata = {
-  title: 'Todo App',
-  description: 'Save and Get Reminders for Your Todos!'
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE
+  },
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: APP_DEFAULT_TITLE
+  },
+  formatDetection: {
+    telephone: false
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE
+    },
+    description: APP_DESCRIPTION
+  }
 }
 
 const RootLayout = ({
@@ -25,6 +50,7 @@ const RootLayout = ({
   return (
     <SessionProvider>
       <html lang="en">
+        <head />
         <body className={inter.className}>{children}</body>
       </html>
     </SessionProvider>
