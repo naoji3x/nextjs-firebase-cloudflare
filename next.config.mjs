@@ -1,7 +1,6 @@
 // code for cloudflare development -- start
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 import fs from 'fs'
-import withPWA from 'next-pwa'
 import path from 'path'
 
 const packageJsonPath = path.resolve(process.cwd(), 'package.json')
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 // code for cloudflare development -- end
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withPWA(pwaConfig)({
+const nextConfig = {
   webpack: (config, { isServer }) => {
     // Exclude test files from the build
     config.module.rules.push({
@@ -37,6 +36,6 @@ const nextConfig = withPWA(pwaConfig)({
   env: {
     NEXT_PUBLIC_VERSION: version
   }
-})
+}
 
 export default nextConfig

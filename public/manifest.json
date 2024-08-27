@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "Todo App",
   "short_name": "TODO",
+  "scope": "/home",
   "start_url": "/home",
   "display": "standalone",
   "background_color": "#fff",
