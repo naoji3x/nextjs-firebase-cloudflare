@@ -73,3 +73,5 @@ firebase-debug.*.log*
 public/sw*
 public/swe-worker*
 
+# firebase messaging
+public/firebase-messaging-sw.js

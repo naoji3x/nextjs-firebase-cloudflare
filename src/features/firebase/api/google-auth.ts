@@ -63,6 +63,7 @@ export const signedInUser = () => {
 export const signOut = async (callbackUrl = '/') => {
   const auth = getAuth()
   if (auth.currentUser) {
+    console.log('signing out ...' + JSON.stringify(auth.currentUser))
     await signOutFirebase(auth)
   }
   await signOutNextAuth({ redirect: true, callbackUrl })
