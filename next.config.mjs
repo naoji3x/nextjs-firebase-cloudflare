@@ -10,7 +10,7 @@ const { version } = packageJson
 
 const withSerwist = withSerwistInit({
   swSrc: 'src/sw.ts',
-  swDest: 'public/sw.js'
+  swDest: 'public/firebase-messaging-sw.js'
 })
 
 // Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
