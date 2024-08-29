@@ -13,7 +13,8 @@ const withSerwist = withSerwistInit({
   swDest: 'public/sw.js',
   // サインアウト時に"The service worker navigation preload request was cancelled before 'preloadResponse' settled."のエラーが出ないよう、
   // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
-  exclude: ['/']
+  exclude: ['/'],
+  disable: true
 })
 
 // Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
