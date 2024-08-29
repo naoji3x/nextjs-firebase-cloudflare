@@ -25,5 +25,10 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "functions", "public/firebase-messaging-sw.js"]
+  "exclude": [
+    "node_modules",
+    "functions",
+    "public/firebase-messaging-sw.js",
+    "sw-env-build.js"
+  ]
 }
