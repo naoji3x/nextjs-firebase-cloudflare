@@ -12,29 +12,9 @@ export const viewport: Viewport = {
   viewportFit: 'cover'
 }
 
-const APP_NAME = 'Todo App'
-const APP_DEFAULT_TITLE = 'My Awesome Todo App'
-const APP_TITLE_TEMPLATE = '%s - Todo App'
-const APP_DESCRIPTION = 'Save and Get Reminders for Your Todos!'
 export const metadata: Metadata = {
-  applicationName: APP_NAME,
-  title: {
-    default: APP_DEFAULT_TITLE,
-    template: APP_TITLE_TEMPLATE
-  },
-  description: APP_DESCRIPTION,
-  formatDetection: {
-    telephone: false
-  },
-  openGraph: {
-    type: 'website',
-    siteName: APP_NAME,
-    title: {
-      default: APP_DEFAULT_TITLE,
-      template: APP_TITLE_TEMPLATE
-    },
-    description: APP_DESCRIPTION
-  }
+  title: 'Todo App',
+  description: 'Save and Get Reminders for Your Todos!'
 }
 
 const RootLayout = ({
