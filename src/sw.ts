@@ -21,7 +21,7 @@ const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
-  // navigationPreload: true,
+  navigationPreload: true,
   runtimeCaching: defaultCache
 })
 
@@ -36,8 +36,6 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 const messaging = getMessaging()
-
-console.log('messaging : ' + JSON.stringify(messaging))
 
 const notify = async (payload: MessagePayload) => {
   let messageTitle = 'Title'
@@ -69,6 +67,21 @@ self.addEventListener(
   },
   false
 )
+
+/*
+// フェッチイベントでプリロードレスポンスを使用する
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    (async () => {
+      const preloadResponse = await event.preloadResponse
+      if (preloadResponse) {
+        return preloadResponse
+      }
+      return fetch(event.request)
+    })()
+  )
+})
+  */
 
 onBackgroundMessage(messaging, (payload) => {
   console.log(

@@ -2,7 +2,7 @@
 
 import {
   signedInUser,
-  signIn,
+  signInWithGoogle,
   UserContext
 } from '#features/firebase/api/google-auth'
 import { useSession } from 'next-auth/react'
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUserContext(currentUser)
       return
     }
-    signIn(session.user.id_token, (user) => setUserContext(user))
+    signInWithGoogle(session.user.id_token, (user) => setUserContext(user))
   }, [session])
 
   return (

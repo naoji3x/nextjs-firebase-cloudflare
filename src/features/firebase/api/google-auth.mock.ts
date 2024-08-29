@@ -8,9 +8,11 @@ const userContext = {
 }
 
 export const signedInUser = fn(() => userContext)
-export const signIn = fn(
+export const signInWithGoogle = fn(
   async (idToken: string, signedIn: (user: UserContext) => void) => {
     signedIn(userContext)
   }
 )
 export const signOut = fn()
+
+export const signIn = fn()

@@ -1,12 +1,13 @@
 import {
   GoogleAuthProvider,
   User,
-  browserLocalPersistence,
-  setPersistence,
   signInWithCredential,
   signOut as signOutFirebase
 } from 'firebase/auth'
-import { signOut as signOutNextAuth } from 'next-auth/react'
+import {
+  signIn as signInNextAuth,
+  signOut as signOutNextAuth
+} from 'next-auth/react'
 import { getAuth } from '../client'
 
 export type UserContext = {
@@ -26,14 +27,14 @@ const toUser = (user: User): UserContext => ({
 /**
  * Sign in with Google.
  */
-export const signIn = async (
+export const signInWithGoogle = async (
   idToken: string,
   signedIn: (user: UserContext) => void
 ) => {
   try {
     const auth = getAuth()
     // ログイン情報を保持する
-    setPersistence(auth, browserLocalPersistence)
+    // setPersistence(auth, browserLocalPersistence)
     const cred = GoogleAuthProvider.credential(idToken)
     await signInWithCredential(auth, cred)
     const currentUser = auth.currentUser
@@ -63,8 +64,11 @@ export const signedInUser = () => {
 export const signOut = async (callbackUrl = '/') => {
   const auth = getAuth()
   if (auth.currentUser) {
-    console.log('signing out ...' + JSON.stringify(auth.currentUser))
     await signOutFirebase(auth)
   }
   await signOutNextAuth({ redirect: true, callbackUrl })
+}
+
+export const signIn = async () => {
+  await signInNextAuth('google')
 }

@@ -10,7 +10,10 @@ const { version } = packageJson
 
 const withSerwist = withSerwistInit({
   swSrc: 'src/sw.ts',
-  swDest: 'public/firebase-messaging-sw.js'
+  swDest: 'public/firebase-messaging-sw.js',
+  // サインアウト時に"The service worker navigation preload request was cancelled before 'preloadResponse' settled."のエラーが出ないよう、
+  // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
+  exclude: ['/']
 })
 
 // Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
@@ -37,7 +40,9 @@ const nextConfig = withSerwist({
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
   env: {
     NEXT_PUBLIC_VERSION: version
-  }
+  },
+  // PWAで"manifest.json:1 Manifest: Line: 1, column: 1, Syntax error."が出るのを回避（少なく）するための設定
+  crossOrigin: 'use-credentials'
 })
 
 export default nextConfig

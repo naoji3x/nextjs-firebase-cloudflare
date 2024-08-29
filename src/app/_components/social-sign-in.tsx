@@ -1,4 +1,5 @@
-import { signIn } from '#auth'
+'use client'
+import { signIn } from '#features/firebase/api/google-auth'
 import GoogleSignInButton from '@/components/elements/google-sign-in-button'
 import { Shell } from '@/components/shells/shell'
 import {
@@ -17,8 +18,7 @@ export const metadata: Metadata = {
 
 const SocialSignIn = () => {
   const handleSignIn = async () => {
-    'use server'
-    await signIn('google')
+    await signIn()
   }
 
   return (
