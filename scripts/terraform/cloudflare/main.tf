@@ -12,12 +12,12 @@ resource "cloudflare_pages_project" "deployment_configs" {
     config {
       owner                         = var.github_owner
       repo_name                     = var.github_repo
-      production_branch             = "main"
+      production_branch             = "cloudflare-prod"
       pr_comments_enabled           = true
       deployments_enabled           = true
       production_deployment_enabled = true
       preview_deployment_setting    = "custom"
-      preview_branch_includes       = ["develop"]
+      preview_branch_includes       = ["cloudlare-dev"]
       preview_branch_excludes       = [var.production_branch]
     }
   }

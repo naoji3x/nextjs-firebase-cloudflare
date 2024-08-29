@@ -16,9 +16,8 @@ variable "project_name" {
 
 variable "production_branch" {
   description = "Production branch to deploy from"
-  default     = "main"
+  default     = "cloudflare-prod"
 }
-
 variable "github_owner" {
   description = "GitHub owner (user or organization)"
 }
