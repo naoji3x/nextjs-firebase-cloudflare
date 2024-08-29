@@ -52,7 +52,6 @@ const DatePicker = ({
             mode="single"
             selected={date}
             onSelect={handleSelect}
-            initialFocus
           />
         </PopoverContent>
       </Popover>

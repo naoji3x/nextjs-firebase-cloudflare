@@ -22,7 +22,7 @@ resource "cloudflare_pages_project" "deployment_configs" {
     }
   }
   build_config {
-    build_command   = "npm run cloudflare:build"
+    build_command   = "npm run build:cloudflare"
     destination_dir = ".vercel/output/static"
     root_dir        = ""
   }

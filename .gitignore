@@ -55,9 +55,6 @@ next-env.d.ts
 #　firebase.jsonはプロジェクト名以外の設定が書かれているのでtemplateのリポジトリに含める
 .firebaserc
 
-# service worker env values
-/public/sw-env.js
-
 # firebase
 logs
 *.log
@@ -73,5 +70,5 @@ firebase-debug.*.log*
 public/sw*
 public/swe-worker*
 
-# firebase messaging
+# firebase messaging service worker
 public/firebase-messaging-sw.js
