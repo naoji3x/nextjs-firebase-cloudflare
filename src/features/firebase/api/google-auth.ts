@@ -43,12 +43,12 @@ export const signInWithGoogle = async (
     } else {
       // エラー時はとにかくサインアウトする
       console.error('Failed to sign in')
-      await signOut()
+      await signOut('/')
     }
   } catch (error) {
     // エラー時はとにかくサインアウトする
     console.error(error)
-    await signOut()
+    await signOut('/')
   }
 }
 
@@ -61,12 +61,16 @@ export const signedInUser = () => {
  * Sign out from the app.
  * @param callbackUrl redirect URL after sign out
  */
-export const signOut = async (callbackUrl = '/') => {
+export const signOut = async (callbackUrl?: string) => {
   const auth = getAuth()
   if (auth.currentUser) {
     await signOutFirebase(auth)
   }
-  await signOutNextAuth({ redirect: true, callbackUrl })
+  if (callbackUrl) {
+    await signOutNextAuth({ redirect: true, callbackUrl })
+  } else {
+    await signOutNextAuth()
+  }
 }
 
 export const signIn = async () => {
