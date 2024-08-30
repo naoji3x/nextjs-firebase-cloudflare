@@ -1,11 +1,20 @@
 // code for cloudflare development -- start
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
+import withSerwistInit from '@serwist/next'
 import fs from 'fs'
 import path from 'path'
 
 const packageJsonPath = path.resolve(process.cwd(), 'package.json')
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
 const { version } = packageJson
+
+const withSerwist = withSerwistInit({
+  swSrc: 'src/sw.ts',
+  swDest: 'public/sw.js',
+  // サインアウト時に"The service worker navigation preload request was cancelled before 'preloadResponse' settled."のエラーが出ないよう、
+  // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
+  exclude: ['/']
+})
 
 // Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
 // (when running the application with `next dev`), for more information see:
@@ -16,7 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 // code for cloudflare development -- end
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withSerwist({
   webpack: (config, { isServer }) => {
     // Exclude test files from the build
     config.module.rules.push({
@@ -34,6 +43,6 @@ const nextConfig = {
   },
   // PWAで"manifest.json:1 Manifest: Line: 1, column: 1, Syntax error."が出るのを回避（少なく）するための設定
   crossOrigin: 'use-credentials'
-}
+})
 
 export default nextConfig
