@@ -1,5 +1,4 @@
 'use client'
-import { signIn } from '#features/firebase/api/google-auth'
 import GoogleSignInButton from '@/components/elements/google-sign-in-button'
 import { Shell } from '@/components/shells/shell'
 import {
@@ -10,6 +9,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { type Metadata } from 'next'
+import { useRouter } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -17,8 +17,10 @@ export const metadata: Metadata = {
 }
 
 const SocialSignIn = () => {
+  const router = useRouter()
   const handleSignIn = async () => {
-    await signIn()
+    router.push('/signin')
+    // await signIn()
   }
 
   return (
