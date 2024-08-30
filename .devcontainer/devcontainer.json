@@ -19,7 +19,7 @@
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [8080],
+  "forwardPorts": [8080, 5001, 9099, 9199, 3000],
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "npm install -g lefthook npm-check-updates",

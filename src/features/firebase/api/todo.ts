@@ -1,6 +1,5 @@
 'use client'
 
-import { randomUUID } from 'crypto'
 import 'firebase/firestore'
 import {
   addDoc,
@@ -19,6 +18,7 @@ import {
   uploadBytes
 } from 'firebase/storage'
 import { Todo, TodoInput } from 'shared/types/todo'
+import { v4 as uuidv4 } from 'uuid'
 import { getFirestore, getStorage } from '../client'
 import { todoConverter } from '../types/todo-firebase'
 
@@ -29,7 +29,7 @@ const handleUpload = async (
   uid: string
 ): Promise<string | null> => {
   if (!blob) return null
-  const path = 'images/' + randomUUID()
+  const path = 'images/' + uuidv4()
   console.log('Uploading file... ' + path)
   const storageRef = ref(getStorage(), path)
   try {
