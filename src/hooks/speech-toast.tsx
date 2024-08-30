@@ -51,7 +51,7 @@ export const useSpeechToast = () => {
         <ToastAction altText="話す" asChild>
           <Button
             className="rounded-full bg-primary"
-            onClick={() => speak(toastMessage?.description || null)}
+            onPointerDown={() => speak(toastMessage?.description || null)}
           >
             <Speech size={24} />
           </Button>

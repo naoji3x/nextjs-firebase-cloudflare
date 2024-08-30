@@ -1,6 +1,9 @@
 'use client'
 
-import { upsertDeviceToken } from '#features/firebase/api/device-token'
+import {
+  listDeviceTokens,
+  upsertDeviceToken
+} from '#features/firebase/api/device-token'
 import {
   getAuth,
   helloWorldKebab,
@@ -159,7 +162,13 @@ const Home = () => {
     if (!messaging?.token || messageValue === '') return
     try {
       console.log('sending message : ' + messaging.token)
-      await sendMessage('メッセージ', messageValue, [messaging.token])
+      if (user) {
+        const tokens = (await listDeviceTokens(user.uid)).map((t) => t.id)
+        console.log(
+          `sending message [${tokens.length}] ... ` + JSON.stringify(tokens)
+        )
+        await sendMessage('メッセージ', messageValue, tokens)
+      }
     } catch (e) {
       console.error('Error adding document: ', e)
     }
