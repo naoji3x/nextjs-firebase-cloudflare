@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 const SignOut = () => {
   useEffect(() => {
     const func = async () => {
-      await signOut('/')
+      await signOut()
     }
     func()
   }, [])
