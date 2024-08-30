@@ -20,7 +20,6 @@ const SocialSignIn = () => {
   const router = useRouter()
   const handleSignIn = async () => {
     router.push('/signin')
-    // await signIn()
   }
 
   return (
