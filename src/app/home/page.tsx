@@ -296,7 +296,7 @@ const Home = () => {
 
       <footer className="w-full bg-foreground text-background  py-4">
         <div className="container mx-auto px-4 text-center">
-          <p>nextjs-firebase-frontend: ver. {env.NEXT_PUBLIC_VERSION}</p>
+          <p>nextjs-firebase-cloudflare: ver. {env.NEXT_PUBLIC_VERSION}</p>
         </div>
       </footer>
     </div>
