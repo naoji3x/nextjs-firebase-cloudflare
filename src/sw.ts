@@ -12,13 +12,13 @@ declare global {
   }
 }
 
-declare const self: WorkerGlobalScope
+declare const self: ServiceWorkerGlobalScope
 
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: false,
+  navigationPreload: true,
   runtimeCaching: defaultCache
 })
 
