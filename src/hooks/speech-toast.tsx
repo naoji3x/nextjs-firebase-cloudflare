@@ -2,7 +2,44 @@ import { Button } from '@/components/ui/button'
 import { ToastAction } from '@/components/ui/toast'
 import { toast } from '@/components/ui/use-toast'
 import { Speech } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+const SpeechToast = ({ message = 'toast message' }) => {
+  const [speaking, setSpeaking] = useState<boolean>(false)
+
+  const speak = (speech: string | null) => {
+    if (speech && !speaking) {
+      const ssu = new SpeechSynthesisUtterance(speech)
+      ssu.onstart = () => {
+        setSpeaking(true)
+      }
+      const stop = () => {
+        setSpeaking(false)
+      }
+
+      ssu.onend = stop
+      ssu.onerror = stop
+      ssu.onpause = stop
+      speechSynthesis.speak(ssu)
+    }
+  }
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    buttonRef.current?.focus()
+  })
+  return (
+    <ToastAction altText="話す" asChild>
+      <Button
+        ref={buttonRef}
+        className="rounded-full bg-primary"
+        onClick={() => speak(message || null)}
+      >
+        <Speech size={24} />
+      </Button>
+    </ToastAction>
+  )
+}
 
 type ToastMessage = {
   title?: string
@@ -10,33 +47,10 @@ type ToastMessage = {
 }
 export const useSpeechToast = () => {
   const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null)
-  const [speaking, setSpeaking] = useState<boolean>(false)
-  const [speech, setSpeech] = useState<string | null>(null)
 
   // Toastを表示
   useEffect(() => {
     if (toastMessage === null) return
-
-    const speak = (speech: string | null) => {
-      if (speech && !speaking) {
-        setToastMessage(null)
-        setSpeaking(() => true)
-        const ssu = new SpeechSynthesisUtterance(speech)
-        ssu.onstart = () => {
-          setSpeech(speech)
-        }
-        const stop = () => {
-          setSpeech(null)
-          setSpeaking(() => false)
-        }
-
-        ssu.onend = stop
-        ssu.onerror = stop
-        ssu.onpause = stop
-        speechSynthesis.speak(ssu)
-      }
-    }
-
     toast({
       variant: 'default',
       title: toastMessage?.title,
@@ -47,18 +61,9 @@ export const useSpeechToast = () => {
           setToastMessage(null)
         }
       },
-      action: (
-        <ToastAction altText="話す" asChild>
-          <Button
-            className="rounded-full bg-primary"
-            onPointerDown={() => speak(toastMessage?.description || null)}
-          >
-            <Speech size={24} />
-          </Button>
-        </ToastAction>
-      )
+      action: <SpeechToast message={toastMessage.description} />
     })
-  }, [toastMessage, speaking])
+  }, [toastMessage])
 
-  return { speech, setToastMessage }
+  return { setToastMessage }
 }
