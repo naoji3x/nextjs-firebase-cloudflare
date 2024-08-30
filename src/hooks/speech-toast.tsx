@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ToastAction } from '@/components/ui/toast'
 import { toast } from '@/components/ui/use-toast'
 import { Speech } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const SpeechToast = ({ message = 'toast message' }) => {
   const [speaking, setSpeaking] = useState<boolean>(false)
@@ -24,17 +24,9 @@ const SpeechToast = ({ message = 'toast message' }) => {
     }
   }
 
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  useEffect(() => {
-    buttonRef.current?.focus()
-  })
   return (
-    <ToastAction altText="話す" asChild>
-      <Button
-        ref={buttonRef}
-        className="rounded-full bg-primary"
-        onClick={() => speak(message || null)}
-      >
+    <ToastAction altText="話す" asChild onClick={() => speak(message || null)}>
+      <Button className="rounded-full bg-primary">
         <Speech size={24} />
       </Button>
     </ToastAction>
