@@ -17,7 +17,7 @@ export const getFunctionUri = async (name: string, location: string) => {
   }
   const projectId = await auth.getProjectId()
   const url =
-    'https://cloudfunctions.googleapis.com/v2beta/' +
+    'https://cloudfunctions.googleapis.com/v2/' +
     `projects/${projectId}/locations/${location}/functions/${name}`
 
   const client = await auth.getClient()
