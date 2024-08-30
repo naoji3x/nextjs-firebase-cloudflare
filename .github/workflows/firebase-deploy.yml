@@ -1,0 +1,50 @@
+name: Deploy to Firebase
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - firebase-prod
+      - firebase-dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Authenticate to Firebase
+        env:
+          FIREBASE_SERVICE_ACCOUNT_PROD: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
+          FIREBASE_SERVICE_ACCOUNT_DEV: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/firebase-prod" ]; then
+            echo ${FIREBASE_SERVICE_ACCOUNT_PROD} > ${HOME}/firebase-service-account.json
+          elif [ "${{ github.ref }}" == "refs/heads/firebase-dev" ]; then
+            echo ${FIREBASE_SERVICE_ACCOUNT_DEV} > ${HOME}/firebase-service-account.json
+          fi
+          firebase auth:login --token "$(cat ${HOME}/firebase-service-account.json | jq -r .token)"
+
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_PROJECT_ID_PROD: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
+          FIREBASE_PROJECT_ID_DEV: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/firebase-prod" ]; then
+            firebase deploy --only functions,firestore,storage --project ${FIREBASE_PROJECT_ID_PROD}
+          elif [ "${{ github.ref }}" == "refs/heads/firebase-dev" ]; then
+            firebase deploy --only functions,firestore,storage --project ${FIREBASE_PROJECT_ID_DEV}
+          fi
