@@ -38,7 +38,8 @@ resource "google_project_service" "default" {
     "fcm.googleapis.com",
     "cloudtasks.googleapis.com",
     "securetoken.googleapis.com",
-    "iap.googleapis.com"
+    "iap.googleapis.com",
+    "artifactregistry.googleapis.com"
   ])
   service            = each.key
   disable_on_destroy = false
