@@ -34,7 +34,7 @@ jobs:
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only functions,storage,firestore --project ${PROJECT_ID}
+          args: deploy --only functions,firestore --project ${PROJECT_ID}
 
       - name: Set environment variables for firebase-dev and deploy
         if: github.ref == 'refs/heads/firebase-dev'
@@ -43,4 +43,4 @@ jobs:
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only functions,storage,firestore --project ${PROJECT_ID}
+          args: deploy --only functions,firestore --project ${PROJECT_ID}
