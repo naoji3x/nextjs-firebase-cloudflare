@@ -17,7 +17,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "shadcn": "npx shadcn-ui@latest add",
-    "test": "jest"
+    "test": "jest",
+    "test:github-actions": "act -e tests/act/firebase-dev.json --secret-file tests/act/dummy.secrets"
   },
   "imports": {
     "#auth": {
