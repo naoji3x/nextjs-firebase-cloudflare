@@ -22,12 +22,12 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: (cd functions && npm install)
+        run: (npm install && cd functions && npm install)
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Set environment variables for firebase-prod
+      - name: Set environment variables for firebase-prod and deploy
         if: github.ref == 'refs/heads/firebase-prod'
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
@@ -36,7 +36,7 @@ jobs:
         with:
           args: deploy --only functions,storage,firestore --project ${PROJECT_ID}
 
-      - name: Set environment variables for firebase-dev
+      - name: Set environment variables for firebase-dev and deploy
         if: github.ref == 'refs/heads/firebase-dev'
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}

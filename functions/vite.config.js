@@ -10,7 +10,6 @@ export default defineConfig({
       output: {
         format: 'cjs' // commonjs形式で出力
       }
-      // external: ['../shared'] // expressを外部モジュールとして扱う
     }
   },
   resolve: {
@@ -18,6 +17,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // エイリアス設定
       shared: path.resolve(__dirname, '../shared') // エイリアス設定
     }
+  },
+  css: {
+    postcss: {}
   },
   plugins: [
     // eslint-disable-next-line new-cap
