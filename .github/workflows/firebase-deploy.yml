@@ -31,15 +31,14 @@ jobs:
         if: github.ref == 'refs/heads/firebase-prod'
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
-        run: echo "Set environment variables for firebase-prod"
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions,storage,firestore
 
       - name: Set environment variables for firebase-dev
         if: github.ref == 'refs/heads/firebase-dev'
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
-        run: echo "Set environment variables for firebase-dev"
-
-      - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions,storage,firestore
