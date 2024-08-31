@@ -34,7 +34,7 @@ jobs:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only storage,firestore,functions --project ${PROJECT_ID}
+          args: deploy --only storage,firestore --project ${PROJECT_ID}
 
       - name: Deploy to Firebase (development)
         if: github.ref == 'refs/heads/firebase-dev'
@@ -43,4 +43,4 @@ jobs:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only storage,firestore,functions --project ${PROJECT_ID}
+          args: deploy --only storage,firestore --project ${PROJECT_ID}
