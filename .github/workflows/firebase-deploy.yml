@@ -32,7 +32,6 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
-          CONFIG_VALUES: ${{ secrets.CONFIG_VALUES_PROD }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
@@ -42,7 +41,6 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
-          CONFIG_VALUES: ${{ secrets.CONFIG_VALUES_DEV }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
