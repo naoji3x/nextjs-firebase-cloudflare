@@ -33,6 +33,8 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
+          FUNCTIONS_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
+          FUNCTIONS_REGION: ${{ secrets.FIREBASE_REGION_PROD }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
@@ -43,6 +45,8 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
+          FUNCTIONS_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
+          FUNCTIONS_REGION: ${{ secrets.FIREBASE_REGION_DEV }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
