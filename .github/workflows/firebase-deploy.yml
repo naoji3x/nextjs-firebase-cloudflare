@@ -8,38 +8,26 @@ on:
       - firebase-dev
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
       - name: Install dependencies
         run: (npm install && cd functions && npm install && npm run build)
 
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: dist
-          path: dist
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: dist
-          path: dist
-
+      # Deploy to production environment
       - name: Set environment variables for firebase-prod and deploy
         if: github.ref == 'refs/heads/firebase-prod'
         env:
@@ -49,6 +37,7 @@ jobs:
         with:
           args: deploy --only functions --project ${PROJECT_ID}
 
+      # Deploy to development environment
       - name: Set environment variables for firebase-dev and deploy
         if: github.ref == 'refs/heads/firebase-dev'
         env:
