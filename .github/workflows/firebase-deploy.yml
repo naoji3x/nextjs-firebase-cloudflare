@@ -27,25 +27,12 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Set environment variables for firebase-prod
-        if: github.ref == 'refs/heads/firebase-prod'
-        run:
-          echo "PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" >> $GITHUB_ENV |
-          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" >> $GITHUB_ENV |
-          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_PROD }}" >> $GITHUB_ENV
-
-      - name: Set environment variables for firebase-dev
-        if: github.ref == 'refs/heads/firebase-dev'
-        run:
-          echo "PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" >> $GITHUB_ENV |
-          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" >> $GITHUB_ENV |
-          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_DEV }}" >> $GITHUB_ENV
-
       - name: Deploy to Firebase (production)
         if: github.ref == 'refs/heads/firebase-prod'
         env:
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
-          FUNCTIONS_REGION: ${{ env.FIREBASE_REGION }}"
+          CONFIG_VALUES: ${{ secrets.CONFIG_VALUES_PROD }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
@@ -53,8 +40,9 @@ jobs:
       - name: Deploy to Firebase (development)
         if: github.ref == 'refs/heads/firebase-dev'
         env:
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
-          FUNCTIONS_REGION: ${{ env.FIREBASE_REGION }}"
+          CONFIG_VALUES: ${{ secrets.CONFIG_VALUES_DEV }}
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project ${PROJECT_ID}
