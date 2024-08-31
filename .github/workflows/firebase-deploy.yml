@@ -31,12 +31,14 @@ jobs:
         if: github.ref == 'refs/heads/firebase-prod'
         run:
           echo "PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" >> $GITHUB_ENV |
+          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" >> $GITHUB_ENV |
           echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_PROD }}" >> $GITHUB_ENV
 
       - name: Set environment variables for firebase-dev
         if: github.ref == 'refs/heads/firebase-dev'
         run:
           echo "PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" >> $GITHUB_ENV |
+          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" >> $GITHUB_ENV |
           echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_DEV }}" >> $GITHUB_ENV
 
       - name: Deploy to Firebase (production)
