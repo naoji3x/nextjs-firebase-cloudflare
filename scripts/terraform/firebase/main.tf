@@ -81,7 +81,7 @@ resource "google_firebase_web_app" "default" {
 module "firestore" {
   source         = "./modules/firestore"
   project_id     = var.project_id
-  location       = local.region
+  location       = var.region
   services_ready = google_firebase_project.default
 }
 
@@ -89,7 +89,7 @@ module "firestore" {
 module "storage" {
   source           = "./modules/storage"
   project_id       = var.project_id
-  location         = local.region
+  location         = var.region
   services_ready_1 = module.firestore.firestore_database
   services_ready_2 = google_firebase_project.default
 }
