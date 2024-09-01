@@ -33,14 +33,14 @@ jobs:
         if: github.ref == 'refs/heads/firebase-prod'
         run: |
           echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" > functions/.env
-          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_PROD }}" >> functions/.env
+          echo "FUNCTIONS_REGION=${FIREBASE_REGION_PROD}" >> functions/.env
           cat functions/.env
 
       - name: Write environment variables to .env file (development)
         if: github.ref == 'refs/heads/firebase-dev'
         run: |
           echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" > functions/.env
-          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_DEV }}" >> functions/.env
+          echo "FUNCTIONS_REGION=${FIREBASE_REGION_DEV}" >> functions/.env
           cat functions/.env
 
       # Deploy
