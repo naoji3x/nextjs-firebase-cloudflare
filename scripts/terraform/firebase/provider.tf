@@ -10,7 +10,7 @@ terraform {
 provider "google-beta" {
   # プロジェクトに関連するコストを追跡する
   user_project_override = true
-  billing_project       = var.firebase_project_id
+  billing_project       = var.project_id
 }
 
 provider "google-beta" {

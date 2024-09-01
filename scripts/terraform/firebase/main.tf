@@ -1,12 +1,12 @@
 # Creates a new Google Cloud project.
 resource "google_project" "default" {
   provider = google-beta.no_user_project_override
-  org_id   = var.firebase_org_id
+  org_id   = var.org_id
 
   # project_id should be globally unique
-  project_id      = var.firebase_project_id
-  name            = var.firebase_project_name
-  billing_account = var.firebase_billing_account
+  project_id      = var.project_id
+  name            = var.project_name
+  billing_account = var.billing_account
 
   # Required for the project to display in any list of Firebase projects.
   labels = {
@@ -59,7 +59,7 @@ resource "google_firebase_project" "default" {
 # Firebase Web App
 resource "google_firebase_web_app" "default" {
   provider     = google-beta
-  project      = var.firebase_project_id
+  project      = var.project_id
   display_name = "Todo Web App"
 
   depends_on = [
@@ -80,7 +80,7 @@ resource "google_firebase_web_app" "default" {
 # # Firebase Firestore
 module "firestore" {
   source         = "./modules/firestore"
-  project_id     = var.firebase_project_id
+  project_id     = var.project_id
   location       = local.region
   services_ready = google_firebase_project.default
 }
@@ -88,7 +88,7 @@ module "firestore" {
 # Firebase Cloud Storage
 module "storage" {
   source           = "./modules/storage"
-  project_id       = var.firebase_project_id
+  project_id       = var.project_id
   location         = local.region
   services_ready_1 = module.firestore.firestore_database
   services_ready_2 = google_firebase_project.default
