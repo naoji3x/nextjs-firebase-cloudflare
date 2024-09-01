@@ -7,6 +7,7 @@
     "dev": "node sw-env-build.js && next dev",
     "build": "node sw-env-build.js && next build",
     "build:cloudflare": "node sw-env-build.js && npx @cloudflare/next-on-pages@1",
+    "deploy:firebase": "firebase deploy --only functions,storage,firestore",
     "start": "node sw-env-build.js && next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -16,7 +17,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "shadcn": "npx shadcn-ui@latest add",
-    "test": "jest"
+    "test": "jest",
+    "test:github-actions": "act -e tests/act/firebase-dev.json --secret-file tests/act/dummy.secrets --var-file tests/act/dummy.vars"
   },
   "imports": {
     "#auth": {
