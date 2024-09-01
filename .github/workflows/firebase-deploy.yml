@@ -32,22 +32,22 @@ jobs:
       - name: Write environment variables to .env file (production)
         if: github.ref == 'refs/heads/firebase-prod'
         run: |
-          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" > functions/.env
-          echo "FUNCTIONS_REGION=${{ secrets.FIREBASE_REGION_PROD }}" >> functions/.env
+          echo "FUNCTIONS_PROJECT_ID=${{ variables.FIREBASE_PROJECT_ID_PROD }}" > functions/.env
+          echo "FUNCTIONS_REGION=${{ variables.FIREBASE_REGION_PROD }}" >> functions/.env
           cat functions/.env
 
       - name: Write environment variables to .env file (development)
         if: github.ref == 'refs/heads/firebase-dev'
         run: |
-          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" > functions/.env
-          echo "FUNCTIONS_REGION=${{ secrets.FIREBASE_REGION_DEV }}" >> functions/.env
+          echo "FUNCTIONS_PROJECT_ID=${{ variables.FIREBASE_PROJECT_ID_DEV }}" > functions/.env
+          echo "FUNCTIONS_REGION=${{ variables.FIREBASE_REGION_DEV }}" >> functions/.env
           cat functions/.env
 
       # Deploy
       - name: Deploy to Firebase (production)
         if: github.ref == 'refs/heads/firebase-prod'
         env:
-          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}
+          PROJECT_ID: ${{ variables.FIREBASE_PROJECT_ID_PROD }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
         uses: w9jds/firebase-action@master
         with:
@@ -56,7 +56,7 @@ jobs:
       - name: Deploy to Firebase (development)
         if: github.ref == 'refs/heads/firebase-dev'
         env:
-          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}
+          PROJECT_ID: ${{ variables.FIREBASE_PROJECT_ID_DEV }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
         uses: w9jds/firebase-action@master
         with:
