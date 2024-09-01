@@ -18,7 +18,7 @@ export const initialize = () => {
     return
   }
   initialized = true
-  const region = 'asia-northeast1' // process.env.FUNCTIONS_REGION
+  const region = process.env.FUNCTIONS_REGION
 
   logger.info('initialize admin: ', region)
   // v2のregionを設定

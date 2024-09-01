@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Initialize
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,6 +28,22 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      # Create .env file
+      - name: Write environment variables to .env file (production)
+        if: github.ref == 'refs/heads/firebase-prod'
+        run: |
+          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" > functions/.env
+          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_PROD }}" >> functions/.env
+          cat functions/.env
+
+      - name: Write environment variables to .env file (development)
+        if: github.ref == 'refs/heads/firebase-dev'
+        run: |
+          echo "FUNCTIONS_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" > functions/.env
+          echo "FUNCTIONS_REGION=${{ env.FIREBASE_REGION_DEV }}" >> functions/.env
+          cat functions/.env
+
+      # Deploy
       - name: Deploy to Firebase (production)
         if: github.ref == 'refs/heads/firebase-prod'
         env:
@@ -43,4 +60,4 @@ jobs:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only storage,firestore --project ${PROJECT_ID}
+          args: deploy --only storage,firestore,functions --project ${PROJECT_ID}
