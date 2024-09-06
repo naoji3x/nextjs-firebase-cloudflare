@@ -31,7 +31,4 @@ AUTH_GOOGLE_SECRET = "${process.env.AUTH_GOOGLE_SECRET}"
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require('fs')
 
-fs.writeFileSync(
-  './scripts/terraform/cloudflare/env.tfvars',
-  preview + production
-)
+fs.writeFileSync('./env.tfvars', preview + production)
