@@ -67,8 +67,6 @@ resource "google_firebase_web_app" "default" {
   ]
 }
 
-# 各種モジュールに locals ファイルを渡す
-
 #
 # Firebase Authentication
 # Sign-in with Googleを有効化するスクリプトを検討したが、
@@ -77,20 +75,35 @@ resource "google_firebase_web_app" "default" {
 # のエラーが出てしまい、対応できなかったため、手動で設定することにした。
 #
 
-# # Firebase Firestore
-module "firestore" {
-  source         = "./modules/firestore"
-  project_id     = var.project_id
-  location       = var.region
-  services_ready = google_firebase_project.default
+# Firebase Firestore
+resource "google_firestore_database" "default" {
+  project                     = var.project_id
+  name                        = "(default)"
+  location_id                 = var.region
+  type                        = "FIRESTORE_NATIVE"
+  concurrency_mode            = "OPTIMISTIC"
+  app_engine_integration_mode = "DISABLED"
+
+  depends_on = [
+    google_firebase_project.default
+  ]
 }
 
 # Firebase Cloud Storage
-module "storage" {
-  source           = "./modules/storage"
-  project_id       = var.project_id
-  location         = var.region
-  services_ready_1 = module.firestore.firestore_database
-  services_ready_2 = google_firebase_project.default
+
+# Enable App Engine
+resource "google_app_engine_application" "default" {
+  project     = var.project_id
+  location_id = var.region
+
+  depends_on = [
+    google_firebase_project.default
+  ]
 }
 
+# Storage Bucket
+resource "google_firebase_storage_bucket" "default" {
+  provider  = google-beta
+  project   = var.project_id
+  bucket_id = google_app_engine_application.default.default_bucket
+}
