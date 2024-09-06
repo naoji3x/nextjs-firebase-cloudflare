@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-require('dotenv').config({ path: './apps/frontend/.env.development' })
+require('dotenv').config({ path: '../../../../.env.development' })
 const preview = `
 NEXT_PUBLIC_API_KEY_PREVIEW = "${process.env.NEXT_PUBLIC_API_KEY}"
 NEXT_PUBLIC_AUTH_DOMAIN_PREVIEW = "${process.env.NEXT_PUBLIC_AUTH_DOMAIN}"
@@ -14,7 +14,7 @@ AUTH_GOOGLE_SECRET_PREVIEW = "${process.env.AUTH_GOOGLE_SECRET}"
 `
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-require('dotenv').config({ path: './apps/frontend/.env.production' })
+require('dotenv').config({ path: '../../../../.env.production' })
 const production = `
 NEXT_PUBLIC_API_KEY = "${process.env.NEXT_PUBLIC_API_KEY}"
 NEXT_PUBLIC_AUTH_DOMAIN = "${process.env.NEXT_PUBLIC_AUTH_DOMAIN}"

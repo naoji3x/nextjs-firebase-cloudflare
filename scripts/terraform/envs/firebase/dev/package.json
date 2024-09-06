@@ -5,7 +5,7 @@
     "gc:login": "gcloud auth application-default login",
     "gc:logout": "gcloud auth application-default revoke && gcloud auth revoke",
     "init": "terraform init",
-    "plan:dev": "npm run init && terraform plan -var-file=development.tfvars",
-    "apply:dev": "npm run init && terraform apply -var-file=development.tfvars"
+    "plan": "npm run init && terraform plan -var-file=development.tfvars",
+    "apply": "npm run init && terraform apply -var-file=development.tfvars"
   }
 }
