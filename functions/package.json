@@ -10,6 +10,7 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
+    "deploy:prod": "firebase deploy --only functions --project=prod",
     "logs": "firebase functions:log",
     "test": "jest"
   },
