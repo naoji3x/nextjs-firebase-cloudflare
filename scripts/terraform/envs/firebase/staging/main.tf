@@ -1,5 +1,5 @@
 # Creates a new Google Cloud project.
-resource "google_project" "default" {
+resource "google_project" "staging" {
   provider = google-beta.no_user_project_override
   org_id   = var.org_id
 
@@ -15,9 +15,9 @@ resource "google_project" "default" {
 }
 
 # Enables required APIs.
-resource "google_project_service" "default" {
+resource "google_project_service" "staging" {
   provider = google-beta.no_user_project_override
-  project  = google_project.default.project_id
+  project  = google_project.staging.project_id
   for_each = toset([
     # example form https://zenn.dev/cloud_ace/articles/b791cce386d523
     "cloudbuild.googleapis.com",
@@ -45,24 +45,24 @@ resource "google_project_service" "default" {
 }
 
 # Enables Firebase services for the new project created above.
-resource "google_firebase_project" "default" {
+resource "google_firebase_project" "staging" {
   provider = google-beta
-  project  = google_project.default.project_id
+  project  = google_project.staging.project_id
 
   # Waits for the required APIs to be enabled.
   depends_on = [
-    google_project_service.default,
+    google_project_service.staging,
   ]
 }
 
 # Firebase Web App
-resource "google_firebase_web_app" "default" {
+resource "google_firebase_web_app" "staging" {
   provider     = google-beta
   project      = var.project_id
   display_name = "Todo Web App"
 
   depends_on = [
-    google_firebase_project.default,
+    google_firebase_project.staging,
   ]
 }
 
@@ -72,7 +72,7 @@ resource "google_firebase_web_app" "default" {
 #
 
 # Firebase Firestore
-resource "google_firestore_database" "default" {
+resource "google_firestore_database" "staging" {
   project                     = var.project_id
   name                        = "(default)"
   location_id                 = var.region
@@ -81,25 +81,25 @@ resource "google_firestore_database" "default" {
   app_engine_integration_mode = "DISABLED"
 
   depends_on = [
-    google_firebase_project.default
+    google_firebase_project.staging
   ]
 }
 
 # Firebase Cloud Storage
 
 # Enable App Engine
-resource "google_app_engine_application" "default" {
+resource "google_app_engine_application" "staging" {
   project     = var.project_id
   location_id = var.region
 
   depends_on = [
-    google_firebase_project.default
+    google_firebase_project.staging
   ]
 }
 
 # Storage Bucket
-resource "google_firebase_storage_bucket" "default" {
+resource "google_firebase_storage_bucket" "staging" {
   provider  = google-beta
   project   = var.project_id
-  bucket_id = google_app_engine_application.default.default_bucket
+  bucket_id = google_app_engine_application.staging.default_bucket
 }

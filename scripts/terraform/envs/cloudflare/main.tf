@@ -17,7 +17,7 @@ resource "cloudflare_pages_project" "deployment_configs" {
       deployments_enabled           = true
       production_deployment_enabled = true
       preview_deployment_setting    = "custom"
-      preview_branch_includes       = ["cloudflare-dev"]
+      preview_branch_includes       = ["cloudflare-dev", "cloudflare-staging"]
       preview_branch_excludes       = [var.production_branch]
     }
   }
