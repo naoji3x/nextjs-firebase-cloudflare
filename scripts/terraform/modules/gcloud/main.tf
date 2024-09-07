@@ -9,15 +9,21 @@ resource "google_service_account" "github_actions_sa" {
   description  = "Service account for GitHub Actions"
 }
 
-# resource "google_project_iam_member" "artifact_registry_admin" {
-#   project = var.project_id
-#   role    = "roles/artifactregistry.repoAdmin"
-#   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
-# }
+resource "google_project_iam_member" "artifact_registry_repo_admin" {
+  project = var.project_id
+  role    = "roles/artifactregistry.repoAdmin"
+  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
+}
 
 resource "google_project_iam_member" "artifact_registry_reader" {
   project = var.project_id
   role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
+}
+
+resource "google_project_iam_member" "artifact_registry_admin" {
+  project = var.project_id
+  role    = "roles/artifactregistry.admin"
   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
 }
 
@@ -27,11 +33,17 @@ resource "google_project_iam_member" "cloud_build_service_account" {
   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
 }
 
-# resource "google_project_iam_member" "cloud_tasks_task_executor" {
-#   project = var.project_id
-#   role    = "roles/cloudtasks.taskRunner"
-#   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
-# }
+resource "google_project_iam_member" "cloud_tasks_task_runner" {
+  project = var.project_id
+  role    = "roles/cloudtasks.taskRunner"
+  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
+}
+
+resource "google_project_iam_member" "cloud_tasks_viewer" {
+  project = var.project_id
+  role    = "roles/cloudtasks.viewer"
+  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
+}
 
 resource "google_project_iam_member" "cloud_runtimeconfig_admin" {
   project = var.project_id
@@ -48,12 +60,6 @@ resource "google_project_iam_member" "firebase_admin" {
 resource "google_project_iam_member" "service_account_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
-}
-
-resource "google_project_iam_member" "cloud_tasks_viewer" {
-  project = var.project_id
-  role    = "roles/cloudtasks.viewer"
   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
 }
 
