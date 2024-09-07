@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { initializeApp } from 'firebase-admin/app'
+import { getApp, initializeApp } from 'firebase-admin/app'
 import {
   getFirestore as _getFirestore,
   Firestore
@@ -37,6 +37,7 @@ export const initialize = () => {
 
   firestore = _getFirestore()
   firestore.settings({ ignoreUndefinedProperties: true })
+  console.log('projectId = ' + getApp().options.projectId)
 }
 
 export const getFirestore = () => {
