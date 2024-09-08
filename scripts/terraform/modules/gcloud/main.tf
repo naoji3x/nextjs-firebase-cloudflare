@@ -9,11 +9,11 @@ resource "google_service_account" "github_actions_sa" {
   description  = "Service account for GitHub Actions"
 }
 
-resource "google_project_iam_member" "artifact_registry_repo_admin" {
-  project = var.project_id
-  role    = "roles/artifactregistry.repoAdmin"
-  member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
-}
+# resource "google_project_iam_member" "artifact_registry_repo_admin" {
+#   project = var.project_id
+#   role    = "roles/artifactregistry.repoAdmin"
+#   member  = "serviceAccount:${google_service_account.github_actions_sa.email}"
+# }
 
 resource "google_project_iam_member" "artifact_registry_admin" {
   project = var.project_id
