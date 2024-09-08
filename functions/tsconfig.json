@@ -10,7 +10,7 @@
     "target": "es2017",
     "paths": {
       "@/*": ["./src/*"],
-      "shared/*": ["../shared/*"]
+      "shared/*": ["./shared/*"]
     }
   },
   "include": ["src", "tests"],

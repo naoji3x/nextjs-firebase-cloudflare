@@ -15,7 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'), // エイリアス設定
-      shared: path.resolve(__dirname, '../shared') // エイリアス設定
+      shared: path.resolve(__dirname, 'shared') // エイリアス設定
     }
   },
   css: {
