@@ -4,7 +4,7 @@ import authConfig from './auth.config'
 const { auth } = NextAuth(authConfig)
 
 export const ROOT = '/'
-export const AUTH_ROUTES = ['/signin', '/signout']
+export const AUTH_ROUTES = ['/signin', '/signout', '/error']
 export const PUBLIC_ROUTES = ['/']
 export const DEFAULT_REDIRECT = '/home'
 export default auth((req) => {
