@@ -22,6 +22,9 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
   const [tokenContext, setTokenContext] =
     useState<MessagingContextType>(undefined)
   const [showTokenButton, setShowTokenButton] = useState<boolean>(false)
+  const [showDisableMessagingButton, setShowDisableMessagingButton] =
+    useState<boolean>(false)
+  const [skipMessagingCheck, setSkipMessagingCheck] = useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(false)
 
   useEffect(() => {
@@ -37,6 +40,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
             }))
           } else {
             console.log("messaging isn't supported.")
+            setShowDisableMessagingButton(true)
           }
         } catch (error) {
           console.log(error)
@@ -57,7 +61,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <MessagingContext.Provider value={tokenContext}>
-      {tokenContext ? (
+      {tokenContext || skipMessagingCheck ? (
         children
       ) : (
         <div
@@ -73,6 +77,11 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
           {showTokenButton && (
             <Button onClick={onClickTokenButton} disabled={disabled}>
               通知を許可する
+            </Button>
+          )}
+          {showDisableMessagingButton && (
+            <Button onClick={() => setSkipMessagingCheck(true)}>
+              メッセージ受信しない
             </Button>
           )}
         </div>
