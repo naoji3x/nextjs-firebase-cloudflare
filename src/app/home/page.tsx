@@ -70,7 +70,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen min-w-screen">
-      <header className="w-full py-4 bg-foreground text-background">
+      <header className="w-full py-4 bg-orange-600 text-background">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div>
             <div className="text-xl font-bold">
@@ -102,13 +102,13 @@ const Home = () => {
         </div>
         <div
           className={cn(
-            'fixed bottom-0 left-0 right-0 mx-auto w-full max-w-7xl px-2 shadow-md transition-all duration-200 z-50',
+            'fixed bottom-0 left-0 right-0 mx-auto w-full px-2 shadow-md transition-all duration-200 z-50',
             isFooterVisible ? 'translate-y-0' : 'translate-y-16'
           )}
         >
           <div className="relative">
-            <div className="flex flex-col items-center pb-safe">
-              <div className="h-16 flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center pb-safe">
+              <div className="h-16 w-full flex flex-col items-center justify-center">
                 <TabBar
                   defaultValue={selectedTab}
                   onValueChange={onValueChange}
