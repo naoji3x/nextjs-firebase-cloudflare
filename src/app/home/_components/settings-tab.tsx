@@ -1,6 +1,7 @@
 'use client'
 
 import { getAuth, helloWorldKebab } from '#features/firebase/api/functions'
+import ModeSelector from '@/components/elements/mode-selector'
 import {
   Accordion,
   AccordionContent,
@@ -50,6 +51,10 @@ const SettingsTab = ({ messaging }: { messaging: MessagingContextType }) => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <div className="flex py-4 items-center">
+          <ModeSelector className="pr-2" />
+          ：モード設定
+        </div>
       </div>
     </section>
   )

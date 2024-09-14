@@ -1,5 +1,6 @@
 import { SessionProvider } from '@/providers/session-provider'
 import type { Metadata, Viewport } from 'next'
+import { ThemeProvider } from 'next-themes'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -44,9 +45,13 @@ const RootLayout = ({
 }>) => {
   return (
     <SessionProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning={true}>
         <head />
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </body>
       </html>
     </SessionProvider>
   )

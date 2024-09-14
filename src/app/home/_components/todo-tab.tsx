@@ -147,7 +147,7 @@ const TodoTab = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-8 text-center bg-white">
+      <section className="container mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl font-semibold mb-4">やることリスト</h2>
 
         <div className="flex flex-wrap justify-center">

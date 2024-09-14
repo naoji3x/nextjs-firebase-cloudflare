@@ -23,7 +23,7 @@ const SocialSignIn = () => {
   }
 
   return (
-    <section className="pb-2 bg-white">
+    <section className="pb-2">
       <div className="container mx-auto px-4">
         <Shell className="max-w-lg">
           <Card>

@@ -1,5 +1,4 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { cn } from '@/lib/utils'
 import { ListTodo, Settings, Users } from 'lucide-react'
 import { useState } from 'react'
 
@@ -20,20 +19,13 @@ const TabBar = ({
     children: React.ReactNode
   }) => (
     <ToggleGroupItem value={value} className="p-2 h-14 w-1/4">
-      <div
-        className={cn(
-          'flex flex-col items-center',
-          selectedValue === value ? 'text-orange-600' : 'text-gray-400'
-        )}
-      >
-        {children}
-        <span className="text-[11px] xs:text-xs">{title}</span>
-      </div>
+      {children}
+      <span className="text-[11px] xs:text-xs">{title}</span>
     </ToggleGroupItem>
   )
 
   return (
-    <div className=" bg-white w-screen flex justify-center max-w-7xl">
+    <div className=" w-screen flex justify-center max-w-7xl">
       <div className="flex flex-row w-full max-w-4xl px-1">
         <ToggleGroup
           className="w-full"
