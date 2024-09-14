@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { useAuth } from '@/providers/auth-provider'
 import { useMessaging } from '@/providers/messaging-provider'
 import { TabsContent } from '@radix-ui/react-tabs'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import MessageTab from './_components/message-tab'
@@ -70,14 +71,24 @@ const Home = () => {
 
   return (
     <div className="min-h-screen min-w-screen">
-      <header className="w-full py-4 bg-orange-600 text-background">
+      <header className="w-full py-2 bg-orange-600 text-background">
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <div>
-            <div className="text-xl font-bold">
+          <Image
+            className="border-white border-2 rounded-full"
+            src="/images/icons/circle-icon-512x512.png"
+            alt="logo"
+            width={48}
+            height={48}
+          />
+          <div className="text-center text-white">
+            <div className="text-md sm:text-xl font-bold">
               {user ? user.name : 'No user'}
             </div>
             <div className="text-xs">
-              nextjs-firebase-cloudflare: ver. {env.NEXT_PUBLIC_VERSION}
+              <span className="hidden sm:inline pr-2">
+                nextjs-firebase-cloudflare:
+              </span>
+              ver. {env.NEXT_PUBLIC_VERSION}
             </div>
           </div>
           <Button variant={'secondary'} onClick={() => router.push('/signout')}>
@@ -121,5 +132,4 @@ const Home = () => {
     </div>
   )
 }
-
 export default Home
