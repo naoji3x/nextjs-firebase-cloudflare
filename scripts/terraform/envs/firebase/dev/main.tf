@@ -39,7 +39,8 @@ resource "google_project_service" "dev" {
     "securetoken.googleapis.com",
     "iap.googleapis.com",
     "artifactregistry.googleapis.com",
-    "eventarc.googleapis.com"
+    "eventarc.googleapis.com",
+    "run.googleapis.com"
   ])
   service            = each.key
   disable_on_destroy = false
