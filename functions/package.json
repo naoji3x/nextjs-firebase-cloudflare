@@ -10,10 +10,10 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "deploy:prod": "firebase deploy --only functions --project=prod",
-    "deploy:dev": "firebase deploy --only functions --project=dev",
+    "deploy:prod": "cp .env.production .env && firebase deploy --only functions --project=prod",
+    "deploy:dev": "cp .env.development .env && firebase deploy --only functions --project=dev",
     "logs": "firebase functions:log",
-    "test": "jest"
+    "test": "dotenv -e .env.default jest"
   },
   "engines": {
     "node": "18"
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.1.0",
     "@typescript-eslint/parser": "8.1.0",
+    "dotenv-cli": "7.4.2",
     "eslint-config-google": "0.14.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
