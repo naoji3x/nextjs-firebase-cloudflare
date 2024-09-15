@@ -1,5 +1,5 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { ListTodo, Settings, Users } from 'lucide-react'
+import { ListTodo, MessageCirclePlus, Settings } from 'lucide-react'
 import { useState } from 'react'
 
 const TabBar = ({
@@ -46,7 +46,7 @@ const TabBar = ({
           <ListTodo size={24} />
         </Item>
         <Item value="message" title="メッセージ">
-          <Users size={24} />
+          <MessageCirclePlus size={24} />
         </Item>
         <Item value="settings" title="設定">
           <Settings size={24} />
