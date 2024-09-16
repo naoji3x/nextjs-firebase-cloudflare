@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
-    "types": ["@serwist/next/typings"],
+    "types": ["@serwist/next/typings", "@types/jest"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
