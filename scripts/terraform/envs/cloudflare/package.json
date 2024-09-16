@@ -1,9 +1,0 @@
-{
-  "private": true,
-  "scripts": {
-    "init": "terraform init",
-    "env": "node env-build.js",
-    "plan": "npm run init && terraform plan -var-file=env.tfvars",
-    "apply": "npm run init && terraform apply -var-file=env.tfvars"
-  }
-}
