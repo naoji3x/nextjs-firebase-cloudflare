@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "init": "terraform init",
-    "env": "node ../build-env.js .env.production",
+    "env": "node ../env-build.js .env.production",
     "plan": "npm run env && npm run init && terraform plan -var-file=env.tfvars",
     "apply": "npm run env && npm run init && terraform apply -var-file=env.tfvars"
   }

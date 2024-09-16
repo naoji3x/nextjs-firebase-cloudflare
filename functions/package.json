@@ -13,7 +13,7 @@
     "deploy:prod": "cp .env.production .env && firebase deploy --only functions --project=prod",
     "deploy:dev": "cp .env.development .env && firebase deploy --only functions --project=dev",
     "logs": "firebase functions:log",
-    "test": "dotenv -e .env.default jest"
+    "test": "dotenv -e .env.development jest"
   },
   "engines": {
     "node": "18"
