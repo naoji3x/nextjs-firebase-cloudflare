@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "init": "terraform init",
+    "env": "node ../build-env.js .env.staging",
+    "plan": "npm run env && npm run init && terraform plan -var-file=env.tfvars",
+    "apply": "npm run env && npm run init && terraform apply -var-file=env.tfvars"
+  }
+}
