@@ -24,7 +24,7 @@ jest.mock('@/services/message-service', () => ({
 }))
 
 firebaseFunctionsTest({
-  projectId: process.env.FUNCTIONS_PROJECT_ID
+  projectId: process.env.FUNCTIONS_TEST_PROJECT_ID
 })
 
 describe('todo-message-service', () => {

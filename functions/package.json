@@ -10,10 +10,10 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "deploy:prod": "cp .env.production .env && firebase deploy --only functions --project=prod",
-    "deploy:dev": "cp .env.development .env && firebase deploy --only functions --project=dev",
+    "deploy:prod": "firebase deploy --only functions --project=prod",
+    "deploy:dev": "firebase deploy --only functions --project=dev",
     "logs": "firebase functions:log",
-    "test": "dotenv -e .env.development jest"
+    "test": "dotenv -e .env.test jest"
   },
   "engines": {
     "node": "18"
