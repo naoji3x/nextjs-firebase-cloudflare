@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale/ja'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const TodoCard = ({
   id = '',
@@ -33,8 +33,13 @@ const TodoCard = ({
   const handleCheckboxChange = (checked: boolean | 'indeterminate') => {
     const state: boolean = checked === 'indeterminate' ? false : checked
     setChecked(state)
+    console.log('handleCheckboxChange', id, state)
     onDone(id, state)
   }
+
+  useEffect(() => {
+    setChecked(done)
+  }, [done])
 
   return (
     <Card className={cn('w-full', className)} {...props}>
