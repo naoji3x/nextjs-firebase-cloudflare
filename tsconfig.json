@@ -28,6 +28,7 @@
   "exclude": [
     "node_modules",
     "functions",
+    "public/sw.js",
     "public/firebase-messaging-sw.js",
     "sw-env-build.js"
   ]
