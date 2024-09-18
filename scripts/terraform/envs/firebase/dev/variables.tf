@@ -18,8 +18,3 @@ variable "project_id" {
   description = "Firebase Project ID (a globally unique code)"
   type        = string
 }
-
-variable "region" {
-  description = "The region in which to create the resources."
-  type        = string
-}

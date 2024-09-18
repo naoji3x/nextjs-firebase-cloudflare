@@ -77,7 +77,7 @@ resource "google_firebase_web_app" "dev" {
 resource "google_firestore_database" "dev" {
   project                     = var.project_id
   name                        = "(default)"
-  location_id                 = var.region
+  location_id                 = local.region
   type                        = "FIRESTORE_NATIVE"
   concurrency_mode            = "OPTIMISTIC"
   app_engine_integration_mode = "DISABLED"
@@ -92,7 +92,7 @@ resource "google_firestore_database" "dev" {
 # Enable App Engine
 resource "google_app_engine_application" "dev" {
   project     = var.project_id
-  location_id = var.region
+  location_id = local.region
 
   depends_on = [
     google_firebase_project.dev

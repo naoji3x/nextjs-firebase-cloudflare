@@ -12,4 +12,5 @@ node_modules/
 *.local
 
 # .env files
-.env*
+# .envファイルはgithub actionsのビルド時に参照するので、リポジトリに含める。
+!.env

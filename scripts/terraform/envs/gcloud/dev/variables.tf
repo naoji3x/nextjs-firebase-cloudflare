@@ -7,8 +7,3 @@ variable "account_id" {
   type        = string
   default     = "github-actions-sa"
 }
-
-variable "region" {
-  description = "The region in which to create the resources."
-  type        = string
-}
