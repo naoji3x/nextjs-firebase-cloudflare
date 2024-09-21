@@ -8,6 +8,7 @@
     "build": "node sw-env-build.js && next build",
     "build:cloudflare": "node sw-env-build.js && npx @cloudflare/next-on-pages@1",
     "deploy:firebase:prod": "firebase deploy --only functions,storage,firestore --project=prod",
+    "deploy:firebase:staging": "firebase deploy --only functions,storage,firestore --project=staging",
     "deploy:firebase:dev": "firebase deploy --only functions,storage,firestore --project=dev",
     "start": "node sw-env-build.js && next start",
     "lint": "next lint",

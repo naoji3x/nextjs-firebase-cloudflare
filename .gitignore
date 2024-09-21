@@ -49,6 +49,7 @@ next-env.d.ts
 .env.development
 .env.production
 .env.test
+.env.staging
 
 # firebase setting
 # .firebasercにはプロジェクト名が直接書かれているのでtemplateのリポジトリからは除外

@@ -61,7 +61,7 @@ resource "google_firebase_project" "dev" {
 resource "google_firebase_web_app" "dev" {
   provider     = google-beta
   project      = var.project_id
-  display_name = "Todo Web App"
+  display_name = "Todo Web App Dev"
 
   depends_on = [
     google_firebase_project.dev,
