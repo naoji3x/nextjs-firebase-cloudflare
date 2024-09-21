@@ -18,10 +18,10 @@ const { version } = packageJson
 
 const withSerwist = withSerwistInit({
   swSrc: 'src/sw.ts',
-  swDest: 'public/sw.js'
+  swDest: 'public/sw.js',
   // サインアウト時に"The service worker navigation preload request was cancelled before 'preloadResponse' settled."のエラーが出ないよう、
   // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
-  // exclude: ['/', '/signin', '/signout']
+  exclude: ['/signin', '/signout']
 })
 
 /** @type {import('next').NextConfig} */
