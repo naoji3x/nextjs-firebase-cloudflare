@@ -6,13 +6,6 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  viewportFit: 'cover'
-}
-
 const APP_NAME = 'Todo App'
 const APP_DEFAULT_TITLE = 'My Awesome Todo App'
 const APP_TITLE_TEMPLATE = '%s - Todo App'
@@ -50,6 +43,14 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION
   }
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#FFFFFF'
 }
 
 const RootLayout = ({
