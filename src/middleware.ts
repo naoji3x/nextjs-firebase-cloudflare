@@ -4,7 +4,7 @@ import authConfig from './auth.config'
 const { auth } = NextAuth(authConfig)
 
 export const ROOT = '/'
-export const AUTH_ROUTES = ['/signin', '/signout', '/error']
+export const AUTH_ROUTES = ['/signin', '/signout', '/error', '/pwa']
 export const PUBLIC_ROUTES = ['/']
 export const DEFAULT_REDIRECT = '/home'
 export default auth((req) => {
@@ -28,5 +28,7 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+  matcher: [
+    '/((?!api|_next/static|_next/image|images|favicon.ico|apple-icon.png|icon.svg|manifest.json).*)'
+  ]
 }
