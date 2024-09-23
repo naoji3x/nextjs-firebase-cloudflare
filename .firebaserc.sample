@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "dev": "<dev_project_id>",
+    "prod": "<prod_project_id>",
+    "staging": "<staging_project_id>"
+  }
+}

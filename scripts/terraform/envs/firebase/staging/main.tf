@@ -21,15 +21,15 @@ resource "google_project_service" "staging" {
   for_each = toset([
     # example form https://zenn.dev/cloud_ace/articles/b791cce386d523
     "cloudbuild.googleapis.com",
-    "firestore.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "serviceusage.googleapis.com",
-    "identitytoolkit.googleapis.com",
+    "firestore.googleapis.com",            # Firestore API
+    "cloudbilling.googleapis.com",         # Billing API
+    "cloudresourcemanager.googleapis.com", # Cloud Resource Manager API
+    "serviceusage.googleapis.com",         # Service Usage API
+    "identitytoolkit.googleapis.com",      # Firebase Authentication API
     "firebase.googleapis.com",
-    "firebaserules.googleapis.com",
-    "firebasestorage.googleapis.com",
-    "storage.googleapis.com",
+    "firebaserules.googleapis.com",   # Firebase Rules API
+    "firebasestorage.googleapis.com", # Firebase Storage API
+    "storage.googleapis.com",         # Cloud Storage API
     "cloudfunctions.googleapis.com",
     "logging.googleapis.com",
     "monitoring.googleapis.com",
@@ -38,9 +38,7 @@ resource "google_project_service" "staging" {
     "cloudtasks.googleapis.com",
     "securetoken.googleapis.com",
     "iap.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "eventarc.googleapis.com",
-    "run.googleapis.com"
+    "artifactregistry.googleapis.com"
   ])
   service            = each.key
   disable_on_destroy = false

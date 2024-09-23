@@ -1,5 +1,4 @@
-billing_account = "XXXXXX-XXXXXX-XXXXXX"
-project_name    = "project_name"
-project_id      = "project_id"
-region          = "asia-northeast1"
+billing_account = "<XXXXXX-XXXXXX-XXXXXX>"
+project_name    = "<project_name>"
+project_id      = "<project_id>"
 

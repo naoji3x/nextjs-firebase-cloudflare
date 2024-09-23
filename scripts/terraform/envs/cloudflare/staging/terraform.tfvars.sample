@@ -1,0 +1,7 @@
+# cloudflare
+email        = "<dummy@email.com>"
+api_token    = "<token>"
+account_id   = "<account_id>"
+project_name = "<project_name>"
+github_owner = "<owner>"
+github_repo  = "<repo>"
