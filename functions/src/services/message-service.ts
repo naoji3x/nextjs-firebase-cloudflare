@@ -8,7 +8,10 @@ import { getFunctionUri } from './function-uri'
 export const sendMessage = async (message: SendingMessage) => {
   logger.info('now sending messages : ' + JSON.stringify(message))
   const res = await getMessaging().sendEachForMulticast({
-    notification: { title: message.title, body: message.body },
+    notification: {
+      title: message.title,
+      body: message.body + ':' + JSON.stringify(message.tokens)
+    },
     tokens: message.tokens
   })
 
@@ -17,7 +20,8 @@ export const sendMessage = async (message: SendingMessage) => {
       res.successCount +
       ', failureCount = ' +
       res.failureCount +
-      `, ${JSON.stringify(res.responses)}`
+      `, ${JSON.stringify(res.responses)}` +
+      `, message = ${JSON.stringify(message)}`
   )
 }
 
