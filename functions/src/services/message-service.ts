@@ -6,11 +6,10 @@ import { getFunctionUri } from './function-uri'
 
 // メッセージを送信する
 export const sendMessage = async (message: SendingMessage) => {
-  logger.info('now sending messages : ' + JSON.stringify(message))
   const res = await getMessaging().sendEachForMulticast({
     notification: {
       title: message.title,
-      body: message.body + ':' + JSON.stringify(message.tokens)
+      body: message.body
     },
     tokens: message.tokens
   })

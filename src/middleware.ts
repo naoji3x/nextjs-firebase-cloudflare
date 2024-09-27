@@ -29,6 +29,6 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|images|favicon.ico|apple-icon.png|icon.svg|manifest.json).*)'
+    '/((?!api|_next/static|_next/image|images|favicon.ico|apple-icon.png|icon.svg|manifest.json|sw.js|firebase-messaging-sw.js).*)'
   ]
 }
