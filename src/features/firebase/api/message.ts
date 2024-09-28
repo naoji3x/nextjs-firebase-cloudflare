@@ -35,31 +35,32 @@ export const onMessageReceived = (
   return unsubscribe
 }
 
-export const getFcmToken = async (
-  checkSupportAndRegisterServiceWorker: boolean
-) => {
-  if (checkSupportAndRegisterServiceWorker) {
-    if (!(await isSupported())) {
-      console.log("messaging isn't supported.")
-      return null
-    }
-    console.log('messaging is supported.')
+export const isFcmTokenSupported = async () => await isSupported()
+
+const getServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
     const scope = '/firebase-cloud-messaging-push-scope'
     const reg = await navigator.serviceWorker.getRegistration(scope)
     if (reg) {
       console.log('service worker is already registered.')
-    } else {
-      console.log('service worker is not registered. Registering...')
-      // https://github.com/firebase/firebase-js-sdk/issues/7693
-      await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-        scope
-      })
+      return reg
     }
+    console.log('service worker is not registered. Registering...')
+    // https://github.com/firebase/firebase-js-sdk/issues/7693
+    return await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+      scope
+    })
   }
+  throw new Error('The browser doesn`t support service worker.')
+}
 
+export const getFcmToken = async () => {
   const messaging = getMessaging(getFirebaseApp())
+  const serviceWorkerRegistration = await getServiceWorker()
+
   const token = await getToken(messaging, {
-    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
+    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+    serviceWorkerRegistration
   })
   return token
 }

@@ -1,6 +1,9 @@
 'use client'
 
-import { getFcmToken } from '#features/firebase/api/message'
+import {
+  getFcmToken,
+  isFcmTokenSupported
+} from '#features/firebase/api/message'
 import {
   ReactNode,
   createContext,
@@ -31,16 +34,18 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
     if (!tokenContext) {
       const func = async () => {
         console.log('getting token ...')
+        if (!(await isFcmTokenSupported())) {
+          console.log("messaging isn't supported.")
+          setShowDisableMessagingButton(true)
+          return
+        }
         try {
-          const token = await getFcmToken(true)
+          const token = await getFcmToken()
           if (token) {
             setTokenContext(() => ({
               token,
               supported: true
             }))
-          } else {
-            console.log("messaging isn't supported.")
-            setShowDisableMessagingButton(true)
           }
         } catch (error) {
           console.log(error)
@@ -55,7 +60,7 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
   const onClickTokenButton = async () => {
     console.log('retry getting token')
     setDisabled(true)
-    const token = await getFcmToken(false)
+    const token = await getFcmToken()
     setTokenContext({ token, supported: true })
   }
 
