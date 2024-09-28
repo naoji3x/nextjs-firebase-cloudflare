@@ -1,4 +1,5 @@
 'use strict'
+
 // eslint-disable-next-line no-undef
 importScripts(
   'https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js'
@@ -7,6 +8,7 @@ importScripts(
 importScripts(
   'https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js'
 )
+
 // eslint-disable-next-line no-undef
 importScripts('./sw-env.js')
 
@@ -24,43 +26,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 const messaging = firebase.messaging()
 
-console.log('messaging : ' + JSON.stringify(messaging))
-
-const notify = async (payload) => {
-  let messageTitle = 'Title'
-  let messageBody = 'Message'
-
-  if (payload.notification) {
-    messageTitle = payload.notification.title
-    messageBody = payload.notification.body
-  } else if (payload.data) {
-    messageTitle = payload.data.type
-    messageBody = payload.data.operation
-  }
-  const notificationPromise = self.registration.showNotification(messageTitle, {
-    body: messageBody
-  })
-  return notificationPromise
-}
-
-// 通知を受けとると push イベントが呼び出される。
-self.addEventListener(
-  'push',
-  function (event) {
-    const payload = event.data.json()
-    console.log(
-      '[firebase-messaging-sw.js] Received foreground message ',
-      JSON.stringify(payload)
-    )
-    event.waitUntil(notify(payload))
-  },
-  false
-)
-
 messaging.onBackgroundMessage((payload) => {
   console.log(
     '[firebase-messaging-sw.js] Received background message ',
-    JSON.stringify(payload)
+    payload
   )
-  return notify(payload)
+  const notificationTitle = payload?.notification?.title || 'Title'
+  const notificationOptions = {
+    body: payload?.notification?.body || 'Body'
+  }
+
+  self.registration.showNotification(notificationTitle, notificationOptions)
 })

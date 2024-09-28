@@ -1,3 +1,4 @@
+// ローカルでの実行用として.env.developmentがあればそれを読み込む、CD環境等、なければ環境変数を読み込む
 require('dotenv').config({ path: '.env.development' })
 const fs = require('fs')
 
