@@ -11,6 +11,7 @@ const APP_DEFAULT_TITLE = 'My Awesome Todo App'
 const APP_TITLE_TEMPLATE = '%s - Todo App'
 const APP_DESCRIPTION = 'Save and Get Reminders for Your Todos!'
 export const metadata: Metadata = {
+  manifest: '/manifest.json',
   applicationName: APP_NAME,
   title: {
     default: APP_DEFAULT_TITLE,
@@ -21,7 +22,6 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: APP_DEFAULT_TITLE
-    // startUpImage: [],
   },
   formatDetection: {
     telephone: false
@@ -44,6 +44,14 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION
   }
 }
+
+/*
+export const metadata: Metadata = {
+  manifest: '/manifest.json',
+  title: 'Todo App',
+  description: 'Save and Get Reminders for Your Todos!'
+}
+*/
 
 export const viewport: Viewport = {
   width: 'device-width',

@@ -71,5 +71,8 @@ firebase-secret-key*.json
 # PWA files
 public/sw*
 public/swe-worker*
-
+public/workbox-*.js
+public/worker-*.js
+public/workbox-*.js.map
+public/worker-*.js.map
 

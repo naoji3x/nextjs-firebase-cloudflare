@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 // code for cloudflare development -- end
 
-import withSerwistInit from '@serwist/next'
+// import withSerwistInit from '@serwist/next'
 import fs from 'fs'
 import path from 'path'
 
@@ -16,6 +16,7 @@ const packageJsonPath = path.resolve(process.cwd(), 'package.json')
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
 const { version } = packageJson
 
+/*
 const withSerwist = withSerwistInit({
   swSrc: 'src/sw.ts',
   swDest: 'public/sw.js',
@@ -23,9 +24,17 @@ const withSerwist = withSerwistInit({
   // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
   exclude: ['/signin', '/signout']
 })
+  */
+
+import nextPWA from 'next-pwa'
+
+const withPWA = nextPWA({
+  dest: 'public'
+})
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withSerwist({
+// const nextConfig = withSerwist({
+const nextConfig = withPWA({
   webpack: (config, { isServer }) => {
     // Exclude test files from the build
     config.module.rules.push({
