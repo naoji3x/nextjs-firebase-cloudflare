@@ -44,10 +44,17 @@ export const getFcmToken = async (
       return null
     }
     console.log('messaging is supported.')
-    // https://github.com/firebase/firebase-js-sdk/issues/7693
-    await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-      scope: '/firebase-cloud-messaging-push-scope'
-    })
+    const scope = '/firebase-cloud-messaging-push-scope'
+    const reg = await navigator.serviceWorker.getRegistration(scope)
+    if (reg) {
+      console.log('service worker is already registered.')
+    } else {
+      console.log('service worker is not registered. Registering...')
+      // https://github.com/firebase/firebase-js-sdk/issues/7693
+      await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+        scope
+      })
+    }
   }
 
   const messaging = getMessaging(getFirebaseApp())
