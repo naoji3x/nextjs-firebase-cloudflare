@@ -1,11 +1,11 @@
 'use strict'
 // eslint-disable-next-line no-undef
 importScripts(
-  'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js'
+  'https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js'
 )
 // eslint-disable-next-line no-undef
 importScripts(
-  'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js'
+  'https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js'
 )
 // eslint-disable-next-line no-undef
 importScripts('./sw-env.js')
