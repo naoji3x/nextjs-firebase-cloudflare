@@ -48,14 +48,15 @@ const getServiceWorker = async () => {
     }
     console.log('service worker is not registered. Registering...')
     // https://github.com/firebase/firebase-js-sdk/issues/7693
-    const sw = await navigator.serviceWorker.register(
+    const newReg = await navigator.serviceWorker.register(
       `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
       {
         scope
       }
     )
-    sw.update()
-    return sw
+    await navigator.serviceWorker.ready
+
+    return newReg
   }
   throw new Error('The browser doesn`t support service worker.')
 }
