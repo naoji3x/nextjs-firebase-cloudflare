@@ -55,6 +55,7 @@ const getServiceWorker = async () => {
       }
     )
     await navigator.serviceWorker.ready
+    await newReg.update()
 
     return newReg
   }
