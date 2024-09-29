@@ -26,6 +26,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 const messaging = firebase.messaging()
 
+self.addEventListener('push', (event) => {
+  const payload = event.data.json()
+
+  const notificationTitle = payload.notification.title
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(notificationTitle, notificationOptions)
+  )
+})
+
+/*
 console.log(
   '[firebase-messaging-sw.js] Loaded! then start receiving background messages.'
 )
@@ -41,3 +56,4 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions)
 })
+  */
