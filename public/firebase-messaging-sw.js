@@ -39,21 +39,3 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(notificationTitle, notificationOptions)
   )
 })
-
-/*
-console.log(
-  '[firebase-messaging-sw.js] Loaded! then start receiving background messages.'
-)
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    payload
-  )
-  const notificationTitle = payload?.notification?.title || 'Title'
-  const notificationOptions = {
-    body: payload?.notification?.body || 'Body'
-  }
-
-  self.registration.showNotification(notificationTitle, notificationOptions)
-})
-  */
