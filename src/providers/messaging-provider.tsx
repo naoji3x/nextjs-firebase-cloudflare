@@ -39,6 +39,8 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
           setShowDisableMessagingButton(true)
           return
         }
+        setShowTokenButton(true)
+        /*
         try {
           const token = await getFcmToken()
           if (token) {
@@ -51,17 +53,24 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
           console.log(error)
           setShowTokenButton(true)
         }
+          */
       }
       func()
     }
   }, [tokenContext])
 
-  // トークンを再取得する
+  // トークンを取得する
   const onClickTokenButton = async () => {
     console.log('retry getting token')
     setDisabled(true)
-    const token = await getFcmToken()
-    setTokenContext({ token, supported: true })
+    try {
+      const token = await getFcmToken()
+      setTokenContext({ token, supported: true })
+    } catch (error) {
+      // トークンが取得できなかった場合
+      console.log(error)
+      setDisabled(false)
+    }
   }
 
   return (
