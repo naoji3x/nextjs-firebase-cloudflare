@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs'
 import {
   getMessaging,
   getToken,
@@ -47,9 +48,12 @@ const getServiceWorker = async () => {
     }
     console.log('service worker is not registered. Registering...')
     // https://github.com/firebase/firebase-js-sdk/issues/7693
-    return await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-      scope
-    })
+    return await navigator.serviceWorker.register(
+      `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
+      {
+        scope
+      }
+    )
   }
   throw new Error('The browser doesn`t support service worker.')
 }
