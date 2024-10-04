@@ -38,6 +38,7 @@ export const onMessageReceived = (
 
 export const isFcmSupported = async () => await isSupported()
 
+/*
 export const getFcmToken = async () => {
   const messaging = getMessaging(getFirebaseApp())
   if ('serviceWorker' in navigator) {
@@ -60,6 +61,7 @@ export const getFcmToken = async () => {
   }
   throw new Error('The browser doesn`t support notification.')
 }
+  */
 
 const getServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
@@ -79,7 +81,10 @@ const getServiceWorker = async () => {
       }
     )
     console.log('service worker is registered.')
+    window.location.reload() // reload the page to activate the new service worker
+
     // await navigator.serviceWorker.ready
+    /*
     if (newReg.active || newReg.waiting || newReg.installing) {
       console.log('Service Worker is ready.')
       return newReg
@@ -88,6 +93,7 @@ const getServiceWorker = async () => {
         navigator.serviceWorker.oncontrollerchange = () => resolve(newReg)
       })
     }
+      */
     /*
     console.log('service worker is ready.')
     await newReg.update()
@@ -99,21 +105,19 @@ const getServiceWorker = async () => {
 
 export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const messaging = getMessaging(getFirebaseApp())
-  if ('serviceWorker' in navigator) {
-    const registration = await getServiceWorker()
-    console.log('Service Worker registered with scope:', registration.scope)
-    const permission = await Notification.requestPermission(
-      async (permission) => {
-        console.log('Notification permission:', permission)
-        if (permission === 'granted') {
-          const token = await getToken(messaging, {
-            vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
-            serviceWorkerRegistration: registration
-          })
-          console.log('FCM token is ready')
-          callback(token)
-        }
+  const registration = await getServiceWorker()
+  console.log('Service Worker registered with scope:', registration.scope)
+  const permission = await Notification.requestPermission(
+    async (permission) => {
+      console.log('Notification permission:', permission)
+      if (permission === 'granted') {
+        const token = await getToken(messaging, {
+          vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+          serviceWorkerRegistration: registration
+        })
+        console.log('FCM token is ready')
+        callback(token)
       }
-    )
-  }
+    }
+  )
 }
