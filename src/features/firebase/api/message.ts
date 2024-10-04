@@ -84,7 +84,7 @@ const getServiceWorker = async () => {
       console.log('Service Worker is ready.')
       return newReg
     } else {
-      return new Promise((resolve) => {
+      return new Promise<ServiceWorkerRegistration>((resolve) => {
         navigator.serviceWorker.oncontrollerchange = () => resolve(newReg)
       })
     }
