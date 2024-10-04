@@ -58,8 +58,10 @@ const getServiceWorker = async () => {
       }
     )
     console.log('service worker is registered.')
-    await navigator.serviceWorker.ready
+    // await navigator.serviceWorker.ready
+    //console.log('service worker is ready.')
     await newReg.update()
+    console.log('service worker is updated.')
 
     return newReg
   }
