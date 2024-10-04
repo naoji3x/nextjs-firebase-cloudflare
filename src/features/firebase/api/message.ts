@@ -60,3 +60,28 @@ export const getFcmToken = async () => {
   }
   throw new Error('The browser doesn`t support notification.')
 }
+
+export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
+  const messaging = getMessaging(getFirebaseApp())
+  if ('serviceWorker' in navigator) {
+    const scope = '/firebase-cloud-messaging-push-scope'
+    const registration = await navigator.serviceWorker.register(
+      `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
+      { scope }
+    )
+    console.log('Service Worker registered with scope:', registration.scope)
+    const permission = await Notification.requestPermission(
+      async (permission) => {
+        console.log('Notification permission:', permission)
+        if (permission === 'granted') {
+          const token = await getToken(messaging, {
+            vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+            serviceWorkerRegistration: registration
+          })
+          console.log('FCM token is ready')
+          callback(token)
+        }
+      }
+    )
+  }
+}

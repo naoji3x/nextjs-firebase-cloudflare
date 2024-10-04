@@ -1,6 +1,6 @@
 'use client'
 
-import { getFcmToken, isFcmSupported } from '#features/firebase/api/message'
+import { isFcmSupported, requestFcmToken } from '#features/firebase/api/message'
 import {
   ReactNode,
   createContext,
@@ -45,11 +45,15 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
 
   // トークンを取得する
   const onClickTokenButton = async () => {
-    console.log('retry getting token')
+    console.log('getting token')
     setDisabled(true)
     try {
-      const token = await getFcmToken()
-      setTokenContext({ token, supported: true })
+      // const token = await getFcmToken()
+      // setTokenContext({ token, supported: true })
+      await requestFcmToken((token) => {
+        console.log('requesting token is done')
+        setTokenContext({ token, supported: true })
+      })
     } catch (error) {
       // トークンが取得できなかった場合
       console.log(error)
