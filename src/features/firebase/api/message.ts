@@ -70,11 +70,11 @@ const getServiceWorker = async () => {
 
 export const getFcmToken = async () => {
   const messaging = getMessaging(getFirebaseApp())
-  const serviceWorkerRegistration = await getServiceWorker()
+  // const serviceWorkerRegistration = await getServiceWorker()
 
   const token = await getToken(messaging, {
-    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
-    serviceWorkerRegistration
+    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY
+    //serviceWorkerRegistration
   })
   return token
 }
