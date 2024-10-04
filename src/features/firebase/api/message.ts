@@ -41,12 +41,15 @@ export const isFcmTokenSupported = async () => await isSupported()
 const getServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     const scope = '/firebase-cloud-messaging-push-scope'
+    /*
     const reg = await navigator.serviceWorker.getRegistration(scope)
     if (reg) {
       console.log('service worker is already registered.')
       return reg
     }
     console.log('service worker is not registered. Registering...')
+      */
+
     // https://github.com/firebase/firebase-js-sdk/issues/7693
     const newReg = await navigator.serviceWorker.register(
       `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
@@ -54,6 +57,7 @@ const getServiceWorker = async () => {
         scope
       }
     )
+    console.log('service worker is registered.')
     await navigator.serviceWorker.ready
     await newReg.update()
 
