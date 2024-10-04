@@ -57,11 +57,11 @@ const getServiceWorker = async () => {
         scope
       }
     )
-    console.log('service worker is registered.')
+    //console.log('service worker is registered.')
+    // await newReg.update()
+    // console.log('service worker is updated.')
     // await navigator.serviceWorker.ready
-    //console.log('service worker is ready.')
-    await newReg.update()
-    console.log('service worker is updated.')
+    // console.log('service worker is ready.')
 
     return newReg
   }
