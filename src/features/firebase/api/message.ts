@@ -79,12 +79,20 @@ const getServiceWorker = async () => {
       }
     )
     console.log('service worker is registered.')
-    await navigator.serviceWorker.ready
+    // await navigator.serviceWorker.ready
+    if (newReg.active || newReg.waiting || newReg.installing) {
+      console.log('Service Worker is ready.')
+      return newReg
+    } else {
+      return new Promise((resolve) => {
+        navigator.serviceWorker.oncontrollerchange = () => resolve(newReg)
+      })
+    }
+    /*
     console.log('service worker is ready.')
     await newReg.update()
     console.log('service worker is updated.')
-
-    return newReg
+    return newReg*/
   }
   throw new Error('The browser doesn`t support service worker.')
 }
