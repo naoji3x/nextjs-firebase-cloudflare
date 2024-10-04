@@ -61,14 +61,38 @@ export const getFcmToken = async () => {
   throw new Error('The browser doesn`t support notification.')
 }
 
+const getServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    const scope = '/firebase-cloud-messaging-push-scope'
+    const reg = await navigator.serviceWorker.getRegistration(scope)
+    if (reg) {
+      console.log('service worker is already registered.')
+      return reg
+    }
+    console.log('service worker is not registered. Registering...')
+
+    // https://github.com/firebase/firebase-js-sdk/issues/7693
+    const newReg = await navigator.serviceWorker.register(
+      `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
+      {
+        scope
+      }
+    )
+    console.log('service worker is registered.')
+    await navigator.serviceWorker.ready
+    console.log('service worker is ready.')
+    await newReg.update()
+    console.log('service worker is updated.')
+
+    return newReg
+  }
+  throw new Error('The browser doesn`t support service worker.')
+}
+
 export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const messaging = getMessaging(getFirebaseApp())
   if ('serviceWorker' in navigator) {
-    const scope = '/firebase-cloud-messaging-push-scope'
-    const registration = await navigator.serviceWorker.register(
-      `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
-      { scope }
-    )
+    const registration = await getServiceWorker()
     console.log('Service Worker registered with scope:', registration.scope)
     const permission = await Notification.requestPermission(
       async (permission) => {
