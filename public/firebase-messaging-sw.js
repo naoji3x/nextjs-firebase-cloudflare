@@ -2,11 +2,11 @@
 
 // eslint-disable-next-line no-undef
 importScripts(
-  'https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js'
+  'https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js'
 )
 // eslint-disable-next-line no-undef
 importScripts(
-  'https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js'
+  'https://www.gstatic.com/firebasejs/10.14.0/firebase-messaging-compat.js'
 )
 
 // eslint-disable-next-line no-undef
@@ -25,3 +25,17 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 const messaging = firebase.messaging()
+
+onBackgroundMessage(messaging, (payload) => {
+  console.log(
+    '[firebase-messaging-sw.js] Received background message ',
+    payload
+  )
+  const notificationTitle = 'Background Message Title'
+  const notificationOptions = {
+    body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  }
+
+  self.registration.showNotification(notificationTitle, notificationOptions)
+})

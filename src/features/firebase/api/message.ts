@@ -83,22 +83,10 @@ export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const registration = await getServiceWorker()
 
   console.log('Service Worker registered with scope:', registration.scope)
-  await getToken(messaging, {
-    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
-    serviceWorkerRegistration: registration
-  })
-  console.log('FCM token is ready')
-
-  const names = await caches.keys()
-  names.forEach((name) => {
-    caches.delete(name)
-  })
-
-  console.log('retry getting FCM token')
   const token = await getToken(messaging, {
     vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
     serviceWorkerRegistration: registration
   })
-
+  console.log('FCM token is ready')
   callback(token)
 }
