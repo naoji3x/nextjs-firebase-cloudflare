@@ -38,30 +38,22 @@ export const onMessageReceived = (
 
 export const isFcmSupported = async () => await isSupported()
 
-/*
 export const getFcmToken = async () => {
   const messaging = getMessaging(getFirebaseApp())
-  if ('serviceWorker' in navigator) {
-    const scope = '/firebase-cloud-messaging-push-scope'
-    const registration = await navigator.serviceWorker.register(
-      `/firebase-messaging-sw.js?v=${env.NEXT_PUBLIC_VERSION}`,
-      { scope }
-    )
-    console.log('Service Worker registered with scope:', registration.scope)
-    const permission = await Notification.requestPermission()
-    console.log('Notification permission:', permission)
-    if (permission === 'granted') {
-      const token = await getToken(messaging, {
-        vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
-        serviceWorkerRegistration: registration
-      })
-      console.log('FCM token is ready')
-      return token
-    }
+  const registration = await getServiceWorker()
+  console.log('Service Worker registered with scope:', registration.scope)
+  const permission = await Notification.requestPermission()
+  console.log('Notification permission:', permission)
+  if (permission === 'granted') {
+    const token = await getToken(messaging, {
+      vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+      serviceWorkerRegistration: registration
+    })
+    console.log('FCM token is ready')
+    return token
   }
   throw new Error('The browser doesn`t support notification.')
 }
-  */
 
 const getServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
@@ -81,24 +73,7 @@ const getServiceWorker = async () => {
       }
     )
     console.log('service worker is registered.')
-    window.location.reload() // reload the page to activate the new service worker
-
-    // await navigator.serviceWorker.ready
-    /*
-    if (newReg.active || newReg.waiting || newReg.installing) {
-      console.log('Service Worker is ready.')
-      return newReg
-    } else {
-      return new Promise<ServiceWorkerRegistration>((resolve) => {
-        navigator.serviceWorker.oncontrollerchange = () => resolve(newReg)
-      })
-    }
-      */
-    /*
-    console.log('service worker is ready.')
-    await newReg.update()
-    console.log('service worker is updated.')
-    return newReg*/
+    return newReg
   }
   throw new Error('The browser doesn`t support service worker.')
 }

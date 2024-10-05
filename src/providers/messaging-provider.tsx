@@ -1,6 +1,10 @@
 'use client'
 
-import { isFcmSupported, requestFcmToken } from '#features/firebase/api/message'
+import {
+  getFcmToken,
+  isFcmSupported,
+  requestFcmToken
+} from '#features/firebase/api/message'
 import {
   ReactNode,
   createContext,
@@ -30,26 +34,34 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!tokenContext) {
       const func = async () => {
-        console.log('getting token ...')
         const supported = await isFcmSupported()
         if (!supported) {
           console.log("messaging isn't supported.")
           setShowDisableMessagingButton(true)
           return
         }
-        setShowTokenButton(true)
+
+        console.log('getting token ...')
+        try {
+          const token = await getFcmToken()
+          setTokenContext(() => ({
+            token,
+            supported: true
+          }))
+        } catch (error) {
+          console.log(error)
+          setShowTokenButton(true)
+        }
       }
       func()
     }
   }, [tokenContext])
 
-  // トークンを取得する
+  // トークンを再取得する。iOSのPWAの場合の処理。
   const onClickTokenButton = async () => {
-    console.log('getting token')
+    console.log('retry getting token')
     setDisabled(true)
     try {
-      // const token = await getFcmToken()
-      // setTokenContext({ token, supported: true })
       await requestFcmToken((token) => {
         console.log('requesting token is done')
         setTokenContext({ token, supported: true })
