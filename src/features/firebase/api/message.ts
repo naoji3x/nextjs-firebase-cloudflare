@@ -81,26 +81,24 @@ const getServiceWorker = async () => {
 export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const messaging = getMessaging(getFirebaseApp())
   const registration = await getServiceWorker()
+
   console.log('Service Worker registered with scope:', registration.scope)
-  const token = await getToken(messaging, {
+  await getToken(messaging, {
     vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
     serviceWorkerRegistration: registration
   })
   console.log('FCM token is ready')
+
+  const names = await caches.keys()
+  names.forEach((name) => {
+    caches.delete(name)
+  })
+
+  console.log('retry getting FCM token')
+  const token = await getToken(messaging, {
+    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+    serviceWorkerRegistration: registration
+  })
+
   callback(token)
-  /*
-  const permission = await Notification.requestPermission(
-    async (permission) => {
-      console.log('Notification permission:', permission)
-      if (permission === 'granted') {
-        const token = await getToken(messaging, {
-          vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
-          serviceWorkerRegistration: registration
-        })
-        console.log('FCM token is ready')
-        callback(token)
-      }
-    }
-  )
-    */
 }
