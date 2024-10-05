@@ -10,12 +10,12 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
   }
   return (
     <div onContextMenu={handleContextMenu} className="overscroll-y-none">
-      <MessagingProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <MessagingProvider>
           {children}
           <Toaster />
-        </AuthProvider>
-      </MessagingProvider>
+        </MessagingProvider>
+      </AuthProvider>
     </div>
   )
 }

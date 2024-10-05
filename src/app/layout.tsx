@@ -45,14 +45,6 @@ export const metadata: Metadata = {
   }
 }
 
-/*
-export const metadata: Metadata = {
-  manifest: '/manifest.json',
-  title: 'Todo App',
-  description: 'Save and Get Reminders for Your Todos!'
-}
-*/
-
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
