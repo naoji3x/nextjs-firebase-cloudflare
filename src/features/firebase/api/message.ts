@@ -82,6 +82,13 @@ export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const messaging = getMessaging(getFirebaseApp())
   const registration = await getServiceWorker()
   console.log('Service Worker registered with scope:', registration.scope)
+  const token = await getToken(messaging, {
+    vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
+    serviceWorkerRegistration: registration
+  })
+  console.log('FCM token is ready')
+  callback(token)
+  /*
   const permission = await Notification.requestPermission(
     async (permission) => {
       console.log('Notification permission:', permission)
@@ -95,4 +102,5 @@ export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
       }
     }
   )
+    */
 }
