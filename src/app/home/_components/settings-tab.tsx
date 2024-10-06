@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
 import { MessagingContextType } from '@/providers/messaging-provider'
 import { useEffect, useState } from 'react'
 import { Auth } from 'shared/types/auth'
@@ -25,6 +26,15 @@ const SettingsTab = ({ messaging }: { messaging: MessagingContextType }) => {
     }
     func()
   }, [])
+
+  const close = () => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      console.log('closing window')
+      window.close()
+    } else {
+      alert('この機能はPWAとしてインストールされたアプリでのみ動作します。')
+    }
+  }
 
   return (
     <section className="container mx-auto px-4 py-8">
@@ -55,6 +65,9 @@ const SettingsTab = ({ messaging }: { messaging: MessagingContextType }) => {
           <ModeSelector className="pr-2" />
           ：モード設定
         </div>
+        <Button variant="destructive" onClick={close}>
+          終了
+        </Button>
       </div>
     </section>
   )

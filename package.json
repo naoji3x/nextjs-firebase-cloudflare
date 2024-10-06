@@ -1,6 +1,6 @@
 {
   "name": "nextjs-firebase-cloudflare",
-  "version": "0.3.43",
+  "version": "0.3.44",
   "private": true,
   "scripts": {
     "lefthook:refresh": "lefthook uninstall && lefthook install",
