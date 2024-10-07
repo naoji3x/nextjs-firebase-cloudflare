@@ -51,9 +51,9 @@ const nextConfig = withPWA({
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
   env: {
     NEXT_PUBLIC_VERSION: version
-  }
+  },
   // PWAで"manifest.json:1 Manifest: Line: 1, column: 1, Syntax error."が出るのを回避（少なく）するための設定
-  // crossOrigin: 'use-credentials'
+  crossOrigin: 'use-credentials'
 })
 
 export default nextConfig
