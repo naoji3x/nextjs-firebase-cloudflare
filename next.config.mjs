@@ -29,7 +29,9 @@ const withSerwist = withSerwistInit({
 import nextPWA from 'next-pwa'
 
 const withPWA = nextPWA({
-  dest: 'public'
+  dest: 'public',
+  register: true,
+  skipWaiting: true
 })
 
 /** @type {import('next').NextConfig} */
