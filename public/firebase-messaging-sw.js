@@ -29,7 +29,7 @@ firebase.messaging().onBackgroundMessage(async (message) => {
     if (navigator.serviceWorker)
       navigator.serviceWorker.getRegistration().then(async function (reg) {
         if (reg) {
-          firebase.message().useServiceWorker(reg)
+          // firebase.message().useServiceWorker(reg)
           await reg.showNotification(message.notification.title, {
             body: message.notification.body
           })

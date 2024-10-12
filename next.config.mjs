@@ -8,7 +8,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 // code for cloudflare development -- end
 
-// import withSerwistInit from '@serwist/next'
 import fs from 'fs'
 import path from 'path'
 
@@ -16,22 +15,13 @@ const packageJsonPath = path.resolve(process.cwd(), 'package.json')
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
 const { version } = packageJson
 
-/*
-const withSerwist = withSerwistInit({
-  swSrc: 'src/sw.ts',
-  swDest: 'public/sw.js',
-  // サインアウト時に"The service worker navigation preload request was cancelled before 'preloadResponse' settled."のエラーが出ないよう、
-  // "/"へのリダイレクト時は無効化する。next-authのsignOut()でのリダイレクトが十分に待たれないため？
-  exclude: ['/signin', '/signout']
-})
-  */
-
 import nextPWA from 'next-pwa'
 
 const withPWA = nextPWA({
   dest: 'public',
   register: true,
-  skipWaiting: true
+  skipWaiting: true,
+  importScripts: ['/firebase-messaging-sw.js']
 })
 
 /** @type {import('next').NextConfig} */
