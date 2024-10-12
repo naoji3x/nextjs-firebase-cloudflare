@@ -1,12 +1,11 @@
 'use strict'
-//Firebase Messaging
-// import firebase from "firebase/app";
 
 importScripts('https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js')
 importScripts('https://www.gstatic.com/firebasejs/8.5.0/firebase-messaging.js')
 
 // eslint-disable-next-line no-undef
 importScripts('./sw-env.js')
+console.log('NEXT_PUBLIC_API_KEY = ' + process.env.NEXT_PUBLIC_API_KEY)
 
 // こちらはブラウザでバックグラウンドで通知を受け取るためのファイルです。
 
