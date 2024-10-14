@@ -11,7 +11,6 @@ const APP_DEFAULT_TITLE = 'My Awesome Todo App'
 const APP_TITLE_TEMPLATE = '%s - Todo App'
 const APP_DESCRIPTION = 'Save and Get Reminders for Your Todos!'
 export const metadata: Metadata = {
-  manifest: '/manifest.json',
   applicationName: APP_NAME,
   title: {
     default: APP_DEFAULT_TITLE,
