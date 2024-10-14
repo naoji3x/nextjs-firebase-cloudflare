@@ -1,6 +1,6 @@
 import { defaultCache } from '@serwist/next/worker'
 import { initializeApp } from 'firebase/app'
-import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw'
+import { getMessaging } from 'firebase/messaging/sw'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { Serwist } from 'serwist'
 
@@ -38,20 +38,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APP_ID
 }
 const firebaseApp = initializeApp(firebaseConfig)
-const messaging = getMessaging(firebaseApp)
-
-//background notifications will be received here
-onBackgroundMessage(messaging, async (payload) => {
-  if (Notification.permission === 'granted') {
-    if (navigator.serviceWorker)
-      navigator.serviceWorker.getRegistration().then(async function (reg) {
-        if (reg) {
-          await reg.showNotification(payload?.notification?.title || 'title', {
-            body: payload?.notification?.body
-          })
-        }
-      })
-  }
-})
+getMessaging(firebaseApp)
 
 serwist.addEventListeners()
