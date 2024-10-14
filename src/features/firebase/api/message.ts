@@ -42,7 +42,7 @@ export const getFcmToken = async () => {
   const permission = await Notification.requestPermission()
   console.log('Notification permission:', permission)
   if (permission === 'granted') {
-    const registration = await navigator.serviceWorker.ready
+    const registration = await navigator.serviceWorker.getRegistration()
     console.log('registration', registration)
     const token = await getToken(messaging, {
       vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
@@ -56,7 +56,7 @@ export const getFcmToken = async () => {
 
 export const requestFcmToken = async (callback: (fcmToken: string) => void) => {
   const messaging = getMessaging(getFirebaseApp())
-  const registration = await navigator.serviceWorker.ready
+  const registration = await navigator.serviceWorker.getRegistration()
   const token = await getToken(messaging, {
     vapidKey: firebaseEnv.NEXT_PUBLIC_VAPID_KEY,
     serviceWorkerRegistration: registration
