@@ -3,13 +3,11 @@
 {
   "name": "Node.js",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-18-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
-    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {
-      "version": "13.17.0"
-    },
+    "ghcr.io/devcontainers-contrib/features/firebase-cli:2": {},
     "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
     "ghcr.io/joshuanianji/devcontainer-features/gcloud-cli-persistence:1": {},
     "ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
