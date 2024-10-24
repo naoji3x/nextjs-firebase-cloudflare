@@ -18,5 +18,6 @@ module "cloudflare_root" {
   AUTH_GOOGLE_SECRET              = var.AUTH_GOOGLE_SECRET
   production_branch               = local.production_branch
   preview_branch_includes         = local.preview_branch_includes
+  NODE_VERSION                    = local.NODE_VERSION
 }
 

@@ -60,4 +60,6 @@ variable "preview_branch_includes" {
   description = "Branches to include in preview deployments"
   type        = list(string)
 }
-
+variable "NODE_VERSION" {
+  description = "Node.js version to use"
+}

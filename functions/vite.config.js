@@ -22,7 +22,6 @@ export default defineConfig({
     postcss: {}
   },
   plugins: [
-    // eslint-disable-next-line new-cap
     ...VitePluginNode({
       // Nodejs native Request adapter
       adapter: 'express',

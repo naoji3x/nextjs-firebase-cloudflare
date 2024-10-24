@@ -33,6 +33,7 @@ resource "cloudflare_pages_project" "deployment_configs" {
         NEXT_PUBLIC_MESSAGING_SENDER_ID = var.NEXT_PUBLIC_MESSAGING_SENDER_ID
         NEXT_PUBLIC_APP_ID              = var.NEXT_PUBLIC_APP_ID
         NEXT_PUBLIC_VAPID_KEY           = var.NEXT_PUBLIC_VAPID_KEY
+        NODE_VERSION                    = var.NODE_VERSION
       }
       secrets = {
         AUTH_SECRET        = var.AUTH_SECRET
@@ -51,6 +52,7 @@ resource "cloudflare_pages_project" "deployment_configs" {
         NEXT_PUBLIC_MESSAGING_SENDER_ID = var.NEXT_PUBLIC_MESSAGING_SENDER_ID
         NEXT_PUBLIC_APP_ID              = var.NEXT_PUBLIC_APP_ID
         NEXT_PUBLIC_VAPID_KEY           = var.NEXT_PUBLIC_VAPID_KEY
+        NODE_VERSION                    = var.NODE_VERSION
       }
       secrets = {
         AUTH_SECRET        = var.AUTH_SECRET

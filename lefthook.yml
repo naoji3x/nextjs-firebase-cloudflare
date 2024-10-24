@@ -17,8 +17,12 @@ pre-commit:
     lintstyles:
       glob: '*.{css,scss}'
       run: npx stylelint {staged_files}
-    lintjavascript:
-      glob: '*.{js,ts,tsx}'
+    frontend-lintjavascript:
+      glob: '!(functions)/**/*.{js,ts,tsx}'
+      run: npx eslint {staged_files}
+    functions-lintjavascript:
+      glob: 'functions/**/*.{js,ts,tsx}'
+      root: functions
       run: npx eslint {staged_files}
     lintmarkdown:
       glob: '*.{md}'
