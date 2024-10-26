@@ -1,9 +1,11 @@
 'use strict'
-//Firebase Messaging
-// import firebase from "firebase/app";
 
-importScripts('https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js')
-importScripts('https://www.gstatic.com/firebasejs/8.5.0/firebase-messaging.js')
+importScripts(
+  'https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js'
+)
+importScripts(
+  'https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging-compat.js'
+)
 
 // eslint-disable-next-line no-undef
 importScripts('./sw-env.js')
@@ -23,16 +25,3 @@ if (!firebase.apps.length) {
 }
 
 firebase.messaging()
-
-//background notifications will be received here
-firebase.messaging().onBackgroundMessage(async (message) => {
-  if (Notification.permission === 'granted') {
-    if (navigator.serviceWorker)
-      navigator.serviceWorker.getRegistration().then(async function (reg) {
-        if (reg)
-          await reg.showNotification(message.notification.title, {
-            body: message.notification.body
-          })
-      })
-  }
-})
